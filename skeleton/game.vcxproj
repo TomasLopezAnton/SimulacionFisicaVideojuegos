@@ -254,6 +254,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="callbacks.cpp" />
+    <ClCompile Include="Cannonball.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="RenderUtils.cpp" />
@@ -262,6 +263,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="callbacks.hpp" />
+    <ClInclude Include="Cannonball.h" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="RenderUtils.hpp" />

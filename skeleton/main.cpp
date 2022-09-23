@@ -8,6 +8,7 @@
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
 #include "Particle.h"
+#include "Cannonball.h"
 
 #include <iostream>
 
@@ -30,9 +31,14 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
+std::vector<Particle*> bullets;
+
 Particle* p;
-Vector3 particleVelocity = { 5.0, 5.0, 5.0 };
+Vector3 particleVelocity = { 12.5, 12.5, 0.0 };
+Vector3 particleAcceleration = { 0.0, 1.0, 0.0 };
 Vector3 initialPos = { 0.0, 0.0, 0.0 };
+
+double particleDamping = 1;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -57,7 +63,7 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 
-	p = new Particle(initialPos, particleVelocity);
+	p = new Cannonball(initialPos, particleVelocity, particleAcceleration, particleDamping);
 
 	gScene = gPhysics->createScene(sceneDesc);
 	}
@@ -70,7 +76,11 @@ void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
 
-	p->integrate(t);
+	for(Particle* c: bullets)
+	{
+		c->integrate(t);
+	}
+
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 }
@@ -101,7 +111,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	//case 'B': break;
+	case 'B': 
+		bullets.push_back(new Cannonball(GetCamera()->getEye(), 25 * GetCamera()->getDir(), particleAcceleration, particleDamping));
+		break;
 	//case ' ':	break;
 	case ' ':
 	{

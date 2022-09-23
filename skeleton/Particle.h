@@ -5,15 +5,17 @@
 class Particle
 {
 public:
-	Particle(Vector3 Pos, Vector3 Vel);
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acc, double Damp);
 	~Particle();
 
-	void integrate(double t);
+	virtual void integrate(double t);
 
 protected:
-
-private:
 	Vector3 vel;
+	Vector3 acc;
+	double damp;
 	physx::PxTransform pose; // Pasar la direccion de la pose a RenderItem para que se actualice automaticamente 
 	RenderItem* renderItem;
+private:
+	
 };
