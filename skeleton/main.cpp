@@ -3,12 +3,15 @@
 #include <PxPhysicsAPI.h>
 
 #include <vector>
+#include <typeinfo>
 
 #include "core.hpp"
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
 #include "Particle.h"
 #include "Cannonball.h"
+#include "Fireball.h"
+#include "Laser.h"
 
 #include <iostream>
 
@@ -32,13 +35,18 @@ PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
 std::vector<Particle*> bullets;
+std::vector<Laser*> laserBeam;
 
 Particle* p;
-Vector3 particleVelocity = { 12.5, 12.5, 0.0 };
+Vector3 particleVelocity = { 25.0, 0.0, 0.0 };
+double fireVelocity = 10;
+double laserVelocity = 3000;
 Vector3 particleAcceleration = { 0.0, 1.0, 0.0 };
 Vector3 initialPos = { 0.0, 0.0, 0.0 };
 
 double particleDamping = 1;
+bool firingLaser = false;
+int maxLaserParticles = 100;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -63,7 +71,6 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 
-	p = new Cannonball(initialPos, particleVelocity, particleAcceleration, particleDamping);
 
 	gScene = gPhysics->createScene(sceneDesc);
 	}
@@ -76,9 +83,30 @@ void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
 
+	if (firingLaser)
+	{
+		Laser* las = new Laser(GetCamera()->getEye() + 5 * GetCamera()->getDir(), laserVelocity * GetCamera()->getDir(), 1.0);
+		bullets.push_back(las);
+		laserBeam.push_back(las);
+	}
+
+	int l = -1;
+	int pos = 0;
+
 	for(Particle* c: bullets)
 	{
+		if (c->isLaser() && l < 0) l = pos;
+
 		c->integrate(t);
+		pos++;
+	}
+
+	if (laserBeam.size() > maxLaserParticles) 
+	{
+		Laser* x = laserBeam.front();
+		laserBeam.erase(laserBeam.begin());
+		bullets.erase(bullets.begin() + l);
+		delete x;
 	}
 
 	gScene->simulate(t);
@@ -112,7 +140,13 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	switch(toupper(key))
 	{
 	case 'B': 
-		bullets.push_back(new Cannonball(GetCamera()->getEye(), 25 * GetCamera()->getDir(), particleAcceleration, particleDamping));
+		bullets.push_back(new Cannonball(GetCamera()->getEye(), 25 * GetCamera()->getDir(), particleDamping));
+		break;	
+	case 'F': 
+		bullets.push_back(new Fireball(GetCamera()->getEye() + 2 * GetCamera()->getDir(), fireVelocity * GetCamera()->getDir(), 0.95));
+		break;	
+	case 'L':
+		firingLaser = !firingLaser;
 		break;
 	//case ' ':	break;
 	case ' ':

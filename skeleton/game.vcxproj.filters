@@ -11,7 +11,15 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="Particle.cpp" />
-    <ClCompile Include="Cannonball.cpp" />
+    <ClCompile Include="Cannonball.cpp">
+      <Filter>ParticleTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="Fireball.cpp">
+      <Filter>ParticleTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="Laser.cpp">
+      <Filter>ParticleTypes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -24,11 +32,22 @@
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="Particle.h" />
-    <ClInclude Include="Cannonball.h" />
+    <ClInclude Include="Cannonball.h">
+      <Filter>ParticleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Fireball.h">
+      <Filter>ParticleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Laser.h">
+      <Filter>ParticleTypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
       <UniqueIdentifier>{d04b4f9f-5a69-465e-8070-25c6d0bcd3c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ParticleTypes">
+      <UniqueIdentifier>{e7c547d8-75b0-41fd-80c8-1ac5f5234388}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
