@@ -20,6 +20,9 @@
     <ClCompile Include="Laser.cpp">
       <Filter>ParticleTypes</Filter>
     </ClCompile>
+    <ClCompile Include="Rocket.cpp">
+      <Filter>ParticleTypes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -39,6 +42,9 @@
       <Filter>ParticleTypes</Filter>
     </ClInclude>
     <ClInclude Include="Laser.h">
+      <Filter>ParticleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Rocket.h">
       <Filter>ParticleTypes</Filter>
     </ClInclude>
   </ItemGroup>

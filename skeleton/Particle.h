@@ -10,7 +10,10 @@ public:
 	Particle(Vector3 Pos, Vector3 Vel, double Damp, Vector4 col = {1.0, 1.0, 1.0, 1.0});
 	~Particle();
 
-	void integrate(double t);
+	virtual void integrate(double t);
+
+	void setAcceleration(Vector3 a) { acc = a; };
+
 	virtual bool isLaser() { return false; };
 
 protected:

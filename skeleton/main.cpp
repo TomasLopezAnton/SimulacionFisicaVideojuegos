@@ -12,6 +12,7 @@
 #include "Cannonball.h"
 #include "Fireball.h"
 #include "Laser.h"
+#include "Rocket.h"
 
 #include <iostream>
 
@@ -33,6 +34,9 @@ PxPvd*                  gPvd        = NULL;
 PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
+
+physx::PxTransform bPose = physx::PxTransform({ 0.0, 0.0, 0.0 });
+RenderItem* f;
 
 std::vector<Particle*> bullets;
 std::vector<Laser*> laserBeam;
@@ -71,6 +75,8 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 
+	f = new RenderItem(CreateShape(physx::PxBoxGeometry(100.0, 10.0, 100.0)), &bPose, { 0.0, 0.8, 0.0, 1.0 });
+	RegisterRenderItem(f);
 
 	gScene = gPhysics->createScene(sceneDesc);
 	}
@@ -147,6 +153,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		break;	
 	case 'L':
 		firingLaser = !firingLaser;
+		break;
+	case 'R':
+		bullets.push_back(new Rocket(GetCamera()->getEye() + 2 * GetCamera()->getDir(), fireVelocity * GetCamera()->getDir(), 0.95, {3.0, 0.0, 0.0}));
 		break;
 	//case ' ':	break;
 	case ' ':
