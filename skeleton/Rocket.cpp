@@ -3,11 +3,11 @@
 
 void Rocket::integrate(double t)
 {
-	//std::cout << "CamDir X: " << dir.x << "Y: " << dir.y << "Z: " << dir.z << "\n";
-	Vector3 dir = acc.cross(GetCamera()->getDir());
+	Vector3 dir = GetCamera()->getDir();
+	dir = dir - acc.getNormalized();
 	dir.normalize();
 
-	acc = { dir.x * jet, dir.y * jet + grav, dir.z * jet};
+	acc = {acc.x + dir.x * jet, acc.y + dir.y * jet + grav, acc.z + dir.z * jet};
 
 	std::cout << "Acceleration X: " << acc.x << " Y: " << acc.y << " Z: " << acc.z << "\n";
 	Particle::integrate(t);

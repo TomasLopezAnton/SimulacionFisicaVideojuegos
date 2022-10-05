@@ -35,8 +35,11 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
-physx::PxTransform bPose = physx::PxTransform({ 0.0, 0.0, 0.0 });
+physx::PxTransform floorPose = physx::PxTransform({ 0.0, 0.0, 0.0 });
 RenderItem* f;
+
+physx::PxTransform targetPose = physx::PxTransform({ 20.0, 60.0, 0.0 });
+RenderItem* target;
 
 std::vector<Particle*> bullets;
 std::vector<Laser*> laserBeam;
@@ -75,7 +78,10 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 
-	f = new RenderItem(CreateShape(physx::PxBoxGeometry(100.0, 10.0, 100.0)), &bPose, { 0.0, 0.8, 0.0, 1.0 });
+	f = new RenderItem(CreateShape(physx::PxBoxGeometry(100.0, 10.0, 100.0)), &floorPose, { 0.0, 0.8, 0.0, 1.0 });
+	RegisterRenderItem(f);
+
+	target = new RenderItem(CreateShape(physx::PxSphereGeometry(10.0)), &targetPose, { 0.8, 0.0, 0.0, 1.0 });
 	RegisterRenderItem(f);
 
 	gScene = gPhysics->createScene(sceneDesc);
@@ -155,7 +161,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		firingLaser = !firingLaser;
 		break;
 	case 'R':
-		bullets.push_back(new Rocket(GetCamera()->getEye() + 2 * GetCamera()->getDir(), fireVelocity * GetCamera()->getDir(), 0.95, {3.0, 0.0, 0.0}));
+		bullets.push_back(new Rocket(GetCamera()->getEye() + 2 * GetCamera()->getDir(), fireVelocity * GetCamera()->getDir(), 0.01, {1.0, 0.0, 0.0}));
 		break;
 	//case ' ':	break;
 	case ' ':
