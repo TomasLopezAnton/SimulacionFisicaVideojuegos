@@ -16,6 +16,8 @@ public:
 
 	virtual bool isLaser() { return false; };
 
+	virtual Particle* clone() const { return new Particle(*this); };
+
 protected:
 	Vector3 vel;
 	Vector3 acc = {0.0, 0.0, 0.0};

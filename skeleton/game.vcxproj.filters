@@ -10,7 +10,6 @@
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="callbacks.cpp" />
-    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Cannonball.cpp">
       <Filter>ParticleTypes</Filter>
     </ClCompile>
@@ -21,6 +20,12 @@
       <Filter>ParticleTypes</Filter>
     </ClCompile>
     <ClCompile Include="Rocket.cpp">
+      <Filter>ParticleTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>ParticleSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
       <Filter>ParticleTypes</Filter>
     </ClCompile>
   </ItemGroup>
@@ -34,7 +39,6 @@
     </ClInclude>
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="callbacks.hpp" />
-    <ClInclude Include="Particle.h" />
     <ClInclude Include="Cannonball.h">
       <Filter>ParticleTypes</Filter>
     </ClInclude>
@@ -47,6 +51,18 @@
     <ClInclude Include="Rocket.h">
       <Filter>ParticleTypes</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>ParticleSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>ParticleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleGenerator.h">
+      <Filter>ParticleSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="UniformParticleGenerator.h">
+      <Filter>ParticleSystems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
@@ -54,6 +70,9 @@
     </Filter>
     <Filter Include="ParticleTypes">
       <UniqueIdentifier>{e7c547d8-75b0-41fd-80c8-1ac5f5234388}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ParticleSystems">
+      <UniqueIdentifier>{145d745c-1e10-4bf3-962e-ec9df0f30bd1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

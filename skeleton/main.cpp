@@ -131,6 +131,9 @@ void cleanupPhysics(bool interactive)
 {
 	PX_UNUSED(interactive);
 
+	laserBeam.clear();
+	bullets.clear();
+
 	delete p;
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
 	gScene->release();
@@ -161,7 +164,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		firingLaser = !firingLaser;
 		break;
 	case 'R':
-		bullets.push_back(new Rocket(GetCamera()->getEye() + 2 * GetCamera()->getDir(), fireVelocity * GetCamera()->getDir(), 0.01, {1.0, 0.0, 0.0}));
+		bullets.push_back(new Rocket(GetCamera()->getEye() + 2 * GetCamera()->getDir(), fireVelocity * GetCamera()->getDir(), 0.1, {1.0, 0.0, 0.0}));
 		break;
 	//case ' ':	break;
 	case ' ':
