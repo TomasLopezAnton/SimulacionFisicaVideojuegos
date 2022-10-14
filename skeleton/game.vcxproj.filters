@@ -28,6 +28,9 @@
     <ClCompile Include="Particle.cpp">
       <Filter>ParticleTypes</Filter>
     </ClCompile>
+    <ClCompile Include="UniformParticleGenerator.cpp">
+      <Filter>ParticleSystems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
