@@ -1,9 +1,12 @@
 #include "UniformParticleGenerator.h"
 
+UniformParticleGenerator::UniformParticleGenerator(std::string n, Particle* m, Vector3 p, Vector3 v, Vector3 vWidth, Vector3 pWidth, int num) : ParticleGenerator(n, m, p, v, num), velWidth(vWidth), posWidth(pWidth) 
+{
+	distribution = std::uniform_real_distribution<float>(-1.0, 1.0);
+}
+
 std::list<Particle*> UniformParticleGenerator::generateParticles()
 {
-	std::uniform_real_distribution<double> distribution(-1.0, 1.0);
-
 	std::list<Particle*> l;
 
 	for(int i = 0; i < numParticles; i++)

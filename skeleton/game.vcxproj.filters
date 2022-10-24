@@ -28,8 +28,26 @@
     <ClCompile Include="Particle.cpp">
       <Filter>ParticleTypes</Filter>
     </ClCompile>
+    <ClCompile Include="GaussianParticleGenerator.cpp">
+      <Filter>ParticleGenerators</Filter>
+    </ClCompile>
     <ClCompile Include="UniformParticleGenerator.cpp">
+      <Filter>ParticleGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="TimedParticleSystem.cpp">
       <Filter>ParticleSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="FireworkSystem.cpp">
+      <Filter>ParticleSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="Firework.cpp">
+      <Filter>ParticleTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="FireworkGenerator.cpp">
+      <Filter>ParticleGenerators</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleGenerator.cpp">
+      <Filter>ParticleGenerators</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -60,12 +78,31 @@
     <ClInclude Include="Particle.h">
       <Filter>ParticleTypes</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleGenerator.h">
-      <Filter>ParticleSystems</Filter>
+    <ClInclude Include="GaussianParticleGenerator.h">
+      <Filter>ParticleGenerators</Filter>
     </ClInclude>
     <ClInclude Include="UniformParticleGenerator.h">
+      <Filter>ParticleGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleGenerator.h">
+      <Filter>ParticleGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="TimedParticleSystem.h">
       <Filter>ParticleSystems</Filter>
     </ClInclude>
+    <ClInclude Include="FireworksRules.h">
+      <Filter>ParticleSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="FireworkSystem.h">
+      <Filter>ParticleSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="Firework.h">
+      <Filter>ParticleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="FireworkGenerator.h">
+      <Filter>ParticleGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="Colors.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
@@ -76,6 +113,9 @@
     </Filter>
     <Filter Include="ParticleSystems">
       <UniqueIdentifier>{145d745c-1e10-4bf3-962e-ec9df0f30bd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ParticleGenerators">
+      <UniqueIdentifier>{0380d0cf-7f66-46b9-a4ca-c6c6df83ba49}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -8,7 +8,10 @@ public:
 	void integrate(double t) { Particle::integrate(t); };
 	bool isLaser() { return true; };
 
-	Particle* clone() { return new Laser(*this); };
+	Laser* clone() const { Laser* l = new Laser(*this); l->loadRenderItem(); return l; };
+
+	void loadRenderItem() { Particle::loadRenderItem(); };
+
 protected:
 	double mass = 0.1;
 	Vector3 grv = { 0.0, 0.0, 0.0 };

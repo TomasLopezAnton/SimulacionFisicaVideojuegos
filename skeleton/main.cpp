@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <typeinfo>
+#include <string>
 
 #include "core.hpp"
 #include "RenderUtils.hpp"
@@ -13,8 +14,15 @@
 #include "Fireball.h"
 #include "Laser.h"
 #include "Rocket.h"
+#include "ParticleGenerator.h"
+#include "UniformParticleGenerator.h"
+#include "GaussianParticleGenerator.h"
+#include "ParticleSystem.h"
+#include "FireworkSystem.h"
+
 
 #include <iostream>
+#include <istream>
 
 
 
@@ -54,6 +62,14 @@ Vector3 initialPos = { 0.0, 0.0, 0.0 };
 double particleDamping = 1;
 bool firingLaser = false;
 int maxLaserParticles = 100;
+GaussianParticleGenerator* generator;
+
+float timeRemaining = 0;
+float timeSpent = 0;
+
+std::vector<ParticleSystem*> particleSystems;
+FireworkSystem* fireworks;
+
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -64,9 +80,9 @@ void initPhysics(bool interactive)
 
 	gPvd = PxCreatePvd(*gFoundation);
 	PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate(PVD_HOST, 5425, 10);
-	gPvd->connect(*transport,PxPvdInstrumentationFlag::eALL);
+	gPvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
 
-	gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(),true,gPvd);
+	gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(), true, gPvd);
 
 	gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
 
@@ -78,16 +94,19 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 
-	f = new RenderItem(CreateShape(physx::PxBoxGeometry(100.0, 10.0, 100.0)), &floorPose, { 0.0, 0.8, 0.0, 1.0 });
-	RegisterRenderItem(f);
+	//f = new RenderItem(CreateShape(physx::PxBoxGeometry(100.0, 10.0, 100.0)), &floorPose, { 0.0, 0.8, 0.0, 1.0 });
+	//RegisterRenderItem(f);
 
-	target = new RenderItem(CreateShape(physx::PxSphereGeometry(10.0)), &targetPose, { 0.8, 0.0, 0.0, 1.0 });
-	RegisterRenderItem(f);
+	//target = new RenderItem(CreateShape(physx::PxSphereGeometry(10.0)), &targetPose, { 0.8, 0.0, 0.0, 1.0 });
+	//RegisterRenderItem(f);
+
+	fireworks = new FireworkSystem();
+	particleSystems.push_back(fireworks);
 
 	gScene = gPhysics->createScene(sceneDesc);
-	}
+}
 
-
+	
 // Function to configure what happens in each step of physics
 // interactive: true if the game is rendering, false if it offline
 // t: time passed since last call in milliseconds
@@ -95,31 +114,28 @@ void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
 
-	if (firingLaser)
+	timeRemaining += t;
+	timeSpent += t;
+	//std::cout << t;
+
+	//if (timeRemaining > 0.001)
+	//{
+	//	for (Particle* c : generator->generateParticles()) bullets.push_back(c);
+	//	timeRemaining = 0;
+	//}
+
+
+	while (bullets.size() > 10000)
 	{
-		Laser* las = new Laser(GetCamera()->getEye() + 5 * GetCamera()->getDir(), laserVelocity * GetCamera()->getDir(), 1.0);
-		bullets.push_back(las);
-		laserBeam.push_back(las);
-	}
-
-	int l = -1;
-	int pos = 0;
-
-	for(Particle* c: bullets)
-	{
-		if (c->isLaser() && l < 0) l = pos;
-
-		c->integrate(t);
-		pos++;
-	}
-
-	if (laserBeam.size() > maxLaserParticles) 
-	{
-		Laser* x = laserBeam.front();
-		laserBeam.erase(laserBeam.begin());
-		bullets.erase(bullets.begin() + l);
+		Particle* x = bullets.front();
+		bullets.erase(bullets.begin());
 		delete x;
 	}
+
+	for (ParticleSystem* system : particleSystems) system->update(t);
+	//std::cout << particleSystems[0]->getParticleNumber() << "\n";
+
+	for(Particle* c: bullets) c->integrate(t);
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
@@ -165,6 +181,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		break;
 	case 'R':
 		bullets.push_back(new Rocket(GetCamera()->getEye() + 2 * GetCamera()->getDir(), fireVelocity * GetCamera()->getDir(), 0.1, {1.0, 0.0, 0.0}));
+		break;
+	case 'K':
+		fireworks->generateFirework(5, 1, { 0.0, 10.0, 0.0 });
 		break;
 	//case ' ':	break;
 	case ' ':
