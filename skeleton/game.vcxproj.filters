@@ -103,6 +103,9 @@
       <Filter>ParticleGenerators</Filter>
     </ClInclude>
     <ClInclude Include="Colors.h" />
+    <ClInclude Include="ReproducingParticle.h">
+      <Filter>ParticleTypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

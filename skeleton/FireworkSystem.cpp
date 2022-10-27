@@ -13,19 +13,15 @@ void FireworkSystem::update(double t)
 
 		if ((*it)->getTime() <= 0.0 || distanceFromOrigin > bounds.x)
 		{
-			int type = (*it)->getType();
-
-			if (type > 0)
+			if(Firework* x = dynamic_cast<Firework*>((*it)))
 			{
-				std::vector<Payload> loads = fireworkRules[type].payloads;
+				x->onDeath();
 
-				for (Payload l : loads) generateFirework(l.type, l.count, (*it)->getPosition());
+				Particle* p = (*it);
+				it = particles.erase(it);
+
+				delete p;
 			}
-
-			Particle* x = (*it);
-			it = particles.erase(it);
-
-			delete x;
 		}
 
 		else it++;
@@ -44,30 +40,4 @@ void FireworkSystem::createFireworkRules()
 	fireworkRules[5].set(5, 2, 4, { -10.0, 90.0, -10.0 }, { 10.0, 100.0, 10.0 }, 0.999, { {0, 50}, {1,3}, {2,2}, {3, 1}, {4, 5}});
 	fireworkRules[6].set(6, 0.5, 1.5, { -30.0, -5.0, 0.0 }, { 30.0, 2.5, 0.01 }, 0.999, { {0, 50} });
 	fireworkRules[7].set(7, 2, 4, { -50.0, -5.0, 0.0 }, { 50.0, 0.0, 0.01 }, 0.999, { {6, 25} });
-}
-
-void FireworkSystem::generateFirework(unsigned type, unsigned count, const Vector3 pos)
-{
-	if (type >= fireworkRules.size()) return;
-
-	Colors col;
-
-	FireworkRule rule = fireworkRules[type];
-
-	Particle* p = new Firework({ 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, rule.damping, gravity, 0.01, rule.payloads, rule.type, col.c[type]);
-	p->setGravity(gravity);
-
-	Vector3 velDeviation = rule.maxVelocity - rule.minVelocity;
-	velDeviation = { std::abs(velDeviation.x), std::abs(velDeviation.y), std::abs(velDeviation.z) };
-
-	FireworkGenerator* g = new FireworkGenerator(std::to_string(particleGenerators.size()), p, pos, (rule.maxVelocity + rule.minVelocity) / 2,
-		velDeviation, { 0.01, 0.01, 0.01 }, (rule.maxAge + rule.minAge) / 2, rule.maxAge - rule.minAge, count);
-	
-	//particleGenerators.push_back(g);
-
-	std::list<Particle*> l = g->generateParticles();
-	
-	delete g;
-
-	for (Particle* np : l) particles.push_back(np);
 }

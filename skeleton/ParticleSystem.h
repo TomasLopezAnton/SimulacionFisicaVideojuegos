@@ -12,6 +12,9 @@ public:
 
 	ParticleGenerator* getParticleGenerator(std::string name);
 	int getParticleNumber() { return particles.size(); };
+	void addParticle(Particle* p) { particles.push_back(p); };
+
+	Vector3 getGravity() { return gravity; }
 
 protected:
 	std::list<Particle*> particles;

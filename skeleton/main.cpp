@@ -183,7 +183,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		bullets.push_back(new Rocket(GetCamera()->getEye() + 2 * GetCamera()->getDir(), fireVelocity * GetCamera()->getDir(), 0.1, {1.0, 0.0, 0.0}));
 		break;
 	case 'K':
-		fireworks->generateFirework(5, 1, { 0.0, 10.0, 0.0 });
+		Firework* f = new Firework({0.0, 0.0, 0.0}, {0.0, 10.0, 0.0}, )
+
+		fireworks->addParticle(5, 1, { 0.0, 10.0, 0.0 });
 		break;
 	//case ' ':	break;
 	case ' ':

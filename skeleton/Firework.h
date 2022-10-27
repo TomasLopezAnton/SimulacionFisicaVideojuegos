@@ -1,17 +1,19 @@
 #pragma once
-#include "Particle.h"
+#include "ReproducingParticle.h"
 #include "FireworksRules.h"
+#include "FireworkGenerator.h"
+#include "Colors.h"
 #include <random>
 
-class Firework : public Particle
+class Firework : public ReproducingParticle
 {
 public:
-	Firework(Vector3 Pos, Vector3 Vel, double Damp, Vector3 Grv, double time, std::vector<Payload> p, int type, Vector4 col);
+	Firework(Vector3 Pos, Vector3 Vel, double Damp, Vector3 Grv, double time, std::vector<Payload> p, int type, std::vector<FireworkRule> f, Vector4 col);
 
 	void integrate(double t) { Particle::integrate(t); };
 	std::vector<Payload> explode() { return payloads; };
 
-	int getType() { return fireworkType; }
+	std::list<Particle*> onDeath();
 
 	Firework* clone() const { Firework* fw = new Firework(*this); fw->loadRenderItem(); return fw; };
 
@@ -21,4 +23,5 @@ protected:
 private:
 	unsigned fireworkType;
 	std::vector<Payload> payloads;
+	std::vector<FireworkRule> rules;
 };

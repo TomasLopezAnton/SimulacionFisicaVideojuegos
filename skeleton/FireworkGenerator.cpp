@@ -2,7 +2,6 @@
 
 std::list<Particle*> FireworkGenerator::generateParticles()
 {
-
     std::list<Particle*> l = GaussianParticleGenerator::generateParticles();
 
     std::normal_distribution<float> timeDis(particleTime, timeWidth);

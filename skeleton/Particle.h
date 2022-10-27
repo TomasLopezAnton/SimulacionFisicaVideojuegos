@@ -16,8 +16,6 @@ public:
 
 	virtual void loadRenderItem() { renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(1.0)), &pose, col); };
 
-	virtual void onDeath() {};
-
 	void setAcceleration(Vector3 a) { acc = a; };
 
 	void setVelocity(Vector3 v) { vel = v; };

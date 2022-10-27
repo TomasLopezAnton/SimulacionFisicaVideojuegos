@@ -1,10 +1,7 @@
 #pragma once
 
 #include "ParticleSystem.h"
-#include "FireworkGenerator.h"
 #include "Firework.h"
-#include "FireworksRules.h"
-#include "Colors.h"
 
 class FireworkSystem : public ParticleSystem
 {
@@ -13,7 +10,6 @@ public:
 	void update(double t);
 
 	void createFireworkRules();
-	void generateFirework(unsigned type, unsigned count, const Vector3 pos);
 
 	ParticleGenerator* getParticleGenerator(std::string name);
 
