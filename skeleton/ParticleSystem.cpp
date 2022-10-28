@@ -18,7 +18,12 @@ void ParticleSystem::update(double t)
 	{
 		(*it)->integrate(t);
 
-		if ((*it)->getPosition().y < bounds.y) particles.erase(it);
+		if ((*it)->getPosition().y < bounds.y)
+		{
+			Particle* p = (*it);
+			it = particles.erase(it);
+			delete p;
+		}
 
 		else it++;
 	}

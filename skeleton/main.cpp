@@ -100,7 +100,7 @@ void initPhysics(bool interactive)
 	Particle* p = new Particle({ 0.0, -100000.0, 0.0 }, { 0.0, 0.0, 0.0 }, 0.95, { 0.1, 0.2, 1.0, 1.0 });
 	p->setGravity({ 0.0, -10, 0.0 });
 
-	font->addGenerator(new GaussianParticleGenerator((std::string)"FontGenerator", p, { 0.0, 0.0, 0.0 }, { 0.0, 10.0, 0.0 }, { 2.0, 1.0, 2.0 }, { 0.1, 0.1, 0.1 }, 3));
+	font->addGenerator(new GaussianParticleGenerator((std::string)"FontGenerator", p, { 0.0, 0.0, 0.0 }, { 10.0, 30.0, 0.0 }, { 1.0, 1.0, 1.0 }, { 0.1, 0.1, 0.1 }, 3));
 	particleSystems.push_back(font);
 
 	fireworks = new FireworkSystem();
