@@ -1,5 +1,4 @@
 #include "GaussianParticleGenerator.h"
-#include <chrono>
 
 std::list<Particle*> GaussianParticleGenerator::generateParticles()
 {

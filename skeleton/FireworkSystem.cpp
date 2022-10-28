@@ -9,16 +9,16 @@ void FireworkSystem::update(double t)
 
 	while(it != particles.end())
 	{
-		float distanceFromOrigin = (*it)->getPosition().magnitude();
-
-		if ((*it)->getTime() <= 0.0 || distanceFromOrigin > bounds.x)
+		if ((*it)->getTime() <= 0.0)
 		{
 			if(Firework* x = dynamic_cast<Firework*>((*it)))
 			{
-				x->onDeath();
+				std::list<Particle*> l = x->onDeath();
 
 				Particle* p = (*it);
 				it = particles.erase(it);
+
+				for (Particle* np : l) particles.push_back(np);
 
 				delete p;
 			}
@@ -40,4 +40,9 @@ void FireworkSystem::createFireworkRules()
 	fireworkRules[5].set(5, 2, 4, { -10.0, 90.0, -10.0 }, { 10.0, 100.0, 10.0 }, 0.999, { {0, 50}, {1,3}, {2,2}, {3, 1}, {4, 5}});
 	fireworkRules[6].set(6, 0.5, 1.5, { -30.0, -5.0, 0.0 }, { 30.0, 2.5, 0.01 }, 0.999, { {0, 50} });
 	fireworkRules[7].set(7, 2, 4, { -50.0, -5.0, 0.0 }, { 50.0, 0.0, 0.01 }, 0.999, { {6, 25} });
+}
+
+void FireworkSystem::createFirework()
+{
+	particles.push_back(new Firework({ 0.0, 0.0, 0.0 }, fireworkRules[5].maxVelocity, 0.999, gravity, 2.5, fireworkRules[5].payloads, 5, fireworkRules, { 1.0, 0.0, 1.0, 1.0 }));
 }

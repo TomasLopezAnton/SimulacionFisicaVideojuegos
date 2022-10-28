@@ -10,6 +10,7 @@ public:
 	void update(double t);
 
 	void createFireworkRules();
+	void createFirework();
 
 	ParticleGenerator* getParticleGenerator(std::string name);
 

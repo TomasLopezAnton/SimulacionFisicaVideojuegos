@@ -255,6 +255,7 @@
   <ItemGroup>
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="Cannonball.cpp" />
+    <ClCompile Include="CircleGenerator.cpp" />
     <ClCompile Include="Fireball.cpp" />
     <ClCompile Include="Firework.cpp" />
     <ClCompile Include="FireworkGenerator.cpp" />
@@ -275,6 +276,7 @@
   <ItemGroup>
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="Cannonball.h" />
+    <ClInclude Include="CircleGenerator.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="Fireball.h" />

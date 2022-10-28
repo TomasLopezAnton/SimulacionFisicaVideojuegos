@@ -2,6 +2,7 @@
 
 #include <list>
 #include <random>
+#include <chrono>
 #include "Particle.h"
 
 class ParticleGenerator

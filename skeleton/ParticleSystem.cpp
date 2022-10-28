@@ -2,14 +2,24 @@
 
 void ParticleSystem::update(double t)
 {
-	for (Particle* c : particles)
+	if (generating)
 	{
-		c->integrate(t);
+		std::list<Particle*> l;
+		for (ParticleGenerator* g : particleGenerators)
+		{
+			l = g->generateParticles();
+			for (Particle* p : l) particles.push_back(p);
+		}
+	}
 
-		//if (c->getTime() <= 0)
-		//{
-		//	particles.remove(c);
-		//	delete c;
-		//}
+	std::list<Particle*>::iterator it = particles.begin();
+
+	while (it != particles.end())
+	{
+		(*it)->integrate(t);
+
+		if ((*it)->getPosition().y < bounds.y) particles.erase(it);
+
+		else it++;
 	}
 }

@@ -64,10 +64,8 @@ bool firingLaser = false;
 int maxLaserParticles = 100;
 GaussianParticleGenerator* generator;
 
-float timeRemaining = 0;
-float timeSpent = 0;
-
 std::vector<ParticleSystem*> particleSystems;
+ParticleSystem* font;
 FireworkSystem* fireworks;
 
 
@@ -94,11 +92,16 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 
-	//f = new RenderItem(CreateShape(physx::PxBoxGeometry(100.0, 10.0, 100.0)), &floorPose, { 0.0, 0.8, 0.0, 1.0 });
-	//RegisterRenderItem(f);
+	f = new RenderItem(CreateShape(physx::PxBoxGeometry(1000.0, 1.0, 1000.0)), &floorPose, { 0.8, 0.8, 0.0, 1.0 });
+	RegisterRenderItem(f);
 
-	//target = new RenderItem(CreateShape(physx::PxSphereGeometry(10.0)), &targetPose, { 0.8, 0.0, 0.0, 1.0 });
-	//RegisterRenderItem(f);
+	font = new ParticleSystem();
+
+	Particle* p = new Particle({ 0.0, -100000.0, 0.0 }, { 0.0, 0.0, 0.0 }, 0.95, { 0.1, 0.2, 1.0, 1.0 });
+	p->setGravity({ 0.0, -10, 0.0 });
+
+	font->addGenerator(new GaussianParticleGenerator((std::string)"FontGenerator", p, { 0.0, 0.0, 0.0 }, { 0.0, 10.0, 0.0 }, { 2.0, 1.0, 2.0 }, { 0.1, 0.1, 0.1 }, 3));
+	particleSystems.push_back(font);
 
 	fireworks = new FireworkSystem();
 	particleSystems.push_back(fireworks);
@@ -114,17 +117,6 @@ void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
 
-	timeRemaining += t;
-	timeSpent += t;
-	//std::cout << t;
-
-	//if (timeRemaining > 0.001)
-	//{
-	//	for (Particle* c : generator->generateParticles()) bullets.push_back(c);
-	//	timeRemaining = 0;
-	//}
-
-
 	while (bullets.size() > 10000)
 	{
 		Particle* x = bullets.front();
@@ -133,7 +125,6 @@ void stepPhysics(bool interactive, double t)
 	}
 
 	for (ParticleSystem* system : particleSystems) system->update(t);
-	//std::cout << particleSystems[0]->getParticleNumber() << "\n";
 
 	for(Particle* c: bullets) c->integrate(t);
 
@@ -176,16 +167,14 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'F': 
 		bullets.push_back(new Fireball(GetCamera()->getEye() + 2 * GetCamera()->getDir(), fireVelocity * GetCamera()->getDir(), 0.95));
 		break;	
-	case 'L':
-		firingLaser = !firingLaser;
-		break;
 	case 'R':
 		bullets.push_back(new Rocket(GetCamera()->getEye() + 2 * GetCamera()->getDir(), fireVelocity * GetCamera()->getDir(), 0.1, {1.0, 0.0, 0.0}));
 		break;
+	case 'C':
+		font->generateContinously(!font->getGenerating());
+		break;
 	case 'K':
-		Firework* f = new Firework({0.0, 0.0, 0.0}, {0.0, 10.0, 0.0}, )
-
-		fireworks->addParticle(5, 1, { 0.0, 10.0, 0.0 });
+		fireworks->createFirework();
 		break;
 	//case ' ':	break;
 	case ' ':

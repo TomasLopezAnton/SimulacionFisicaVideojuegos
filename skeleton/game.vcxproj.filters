@@ -49,6 +49,9 @@
     <ClCompile Include="ParticleGenerator.cpp">
       <Filter>ParticleGenerators</Filter>
     </ClCompile>
+    <ClCompile Include="CircleGenerator.cpp">
+      <Filter>ParticleGenerators</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -105,6 +108,9 @@
     <ClInclude Include="Colors.h" />
     <ClInclude Include="ReproducingParticle.h">
       <Filter>ParticleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleGenerator.h">
+      <Filter>ParticleGenerators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
