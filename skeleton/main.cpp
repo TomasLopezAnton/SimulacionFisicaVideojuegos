@@ -49,10 +49,8 @@ RenderItem* f;
 physx::PxTransform targetPose = physx::PxTransform({ 20.0, 60.0, 0.0 });
 RenderItem* target;
 
-std::vector<Particle*> bullets;
 std::vector<Laser*> laserBeam;
 
-Particle* p;
 Vector3 particleVelocity = { 25.0, 0.0, 0.0 };
 double fireVelocity = 10;
 double laserVelocity = 3000;
@@ -62,9 +60,9 @@ Vector3 initialPos = { 0.0, 0.0, 0.0 };
 double particleDamping = 1;
 bool firingLaser = false;
 int maxLaserParticles = 100;
-GaussianParticleGenerator* generator;
 
 std::vector<ParticleSystem*> particleSystems;
+ParticleSystem* bullets;
 ParticleSystem* font;
 FireworkSystem* fireworks;
 
@@ -72,6 +70,9 @@ FireworkSystem* fireworks;
 // Initialize physics engine
 void initPhysics(bool interactive)
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); // Check Memory Leaks
+	//_CrtSetBreakAlloc(1570);
+
 	PX_UNUSED(interactive);
 
 	gFoundation = PxCreateFoundation(PX_FOUNDATION_VERSION, gAllocator, gErrorCallback);
@@ -100,6 +101,9 @@ void initPhysics(bool interactive)
 	Particle* p = new Particle({ 0.0, -100000.0, 0.0 }, { 0.0, 0.0, 0.0 }, 0.95, { 0.1, 0.2, 1.0, 1.0 });
 	p->setGravity({ 0.0, -10, 0.0 });
 
+	bullets = new ParticleSystem();
+	particleSystems.push_back(bullets);
+
 	font->addGenerator(new GaussianParticleGenerator((std::string)"FontGenerator", p, { 0.0, 0.0, 0.0 }, { 10.0, 30.0, 0.0 }, { 1.0, 1.0, 1.0 }, { 0.1, 0.1, 0.1 }, 3));
 	particleSystems.push_back(font);
 
@@ -117,16 +121,7 @@ void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
 
-	while (bullets.size() > 10000)
-	{
-		Particle* x = bullets.front();
-		bullets.erase(bullets.begin());
-		delete x;
-	}
-
 	for (ParticleSystem* system : particleSystems) system->update(t);
-
-	for(Particle* c: bullets) c->integrate(t);
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
@@ -138,10 +133,14 @@ void cleanupPhysics(bool interactive)
 {
 	PX_UNUSED(interactive);
 
-	laserBeam.clear();
-	bullets.clear();
+	for (ParticleSystem* system : particleSystems) delete system;
+	particleSystems.clear();
 
-	delete p;
+	DeregisterRenderItem(f);
+
+	delete f;
+
+
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
 	gScene->release();
 	gDispatcher->release();
@@ -162,13 +161,13 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	switch(toupper(key))
 	{
 	case 'B': 
-		bullets.push_back(new Cannonball(GetCamera()->getEye(), 25 * GetCamera()->getDir(), particleDamping));
+		bullets->addParticle(new Cannonball(GetCamera()->getEye(), 25 * GetCamera()->getDir(), particleDamping));
 		break;	
 	case 'F': 
-		bullets.push_back(new Fireball(GetCamera()->getEye() + 2 * GetCamera()->getDir(), fireVelocity * GetCamera()->getDir(), 0.95));
+		bullets->addParticle(new Fireball(GetCamera()->getEye() + 2 * GetCamera()->getDir(), fireVelocity * GetCamera()->getDir(), 0.95));
 		break;	
 	case 'R':
-		bullets.push_back(new Rocket(GetCamera()->getEye() + 2 * GetCamera()->getDir(), fireVelocity * GetCamera()->getDir(), 0.1, {1.0, 0.0, 0.0}));
+		bullets->addParticle(new Rocket(GetCamera()->getEye() + 2 * GetCamera()->getDir(), fireVelocity * GetCamera()->getDir(), 0.1, {1.0, 0.0, 0.0}, 8));
 		break;
 	case 'C':
 		font->generateContinously(!font->getGenerating());

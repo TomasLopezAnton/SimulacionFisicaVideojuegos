@@ -15,7 +15,6 @@ public:
 	ParticleGenerator* getParticleGenerator(std::string name);
 
 protected:
-	//std::list<Firework*> particles;
 private:
 	std::vector<FireworkRule> fireworkRules;
 	int maxParticles = 1000;

@@ -1,5 +1,14 @@
 #include "ParticleSystem.h"
 
+ParticleSystem::~ParticleSystem()
+{
+	for (Particle* p : particles) delete p;
+	particles.clear();
+
+	for (ParticleGenerator* g : particleGenerators) delete g;
+	particleGenerators.clear();
+}
+
 void ParticleSystem::update(double t)
 {
 	if (generating)
@@ -18,10 +27,15 @@ void ParticleSystem::update(double t)
 	{
 		(*it)->integrate(t);
 
-		if ((*it)->getPosition().y < bounds.y)
+		if ((*it)->getPosition().y < bounds.y || (*it)->getTime() <= 0.0)
 		{
+			std::list<Particle*> l = (*it)->onDeath();
+
 			Particle* p = (*it);
 			it = particles.erase(it);
+
+			for (Particle* np : l) particles.push_back(np);
+
 			delete p;
 		}
 

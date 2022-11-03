@@ -106,12 +106,11 @@
       <Filter>ParticleGenerators</Filter>
     </ClInclude>
     <ClInclude Include="Colors.h" />
-    <ClInclude Include="ReproducingParticle.h">
-      <Filter>ParticleTypes</Filter>
-    </ClInclude>
     <ClInclude Include="CircleGenerator.h">
       <Filter>ParticleGenerators</Filter>
     </ClInclude>
+    <ClInclude Include="checkML.h" />
+    <ClInclude Include="RocketSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

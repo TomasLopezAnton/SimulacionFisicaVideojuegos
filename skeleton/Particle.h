@@ -2,11 +2,12 @@
 #include "core.hpp"
 #include "RenderUtils.hpp"
 #include <string>
+#include <list>
 
 class Particle
 {
 public:
-	Particle(Vector3 Pos, Vector3 Vel, double Damp, Vector3 Acc, double time = 1000, Vector4 col = {0.2, 0.4, 1.0, 1.0});
+	Particle(Vector3 Pos, Vector3 Vel, double Damp, Vector3 Acc, double time = 1000, Vector4 col = {0.2, 0.4, 1.0, 1.0}, float Size = 1.0);
 	Particle(Vector3 Pos, Vector3 Vel, double Damp, Vector4 col = {1.0, 1.0, 1.0, 1.0});
 	~Particle();
 
@@ -14,7 +15,9 @@ public:
 
 	virtual Particle* clone() const { Particle* r = new Particle(*this); r->loadRenderItem(); return r;};
 
-	virtual void loadRenderItem() { renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(1.0)), &pose, col); };
+	virtual void loadRenderItem() { renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(size)), &pose, col); };
+
+	virtual std::list<Particle*> onDeath() { return std::list<Particle*>(); };
 
 	void setAcceleration(Vector3 a) { acc = a; };
 
@@ -42,9 +45,10 @@ protected:
 	Vector3 grav = {0.0, 0.0, 0.0};
 	Vector4 col;
 	double damp;
+	double size;
+	double remainingTime;
 	physx::PxTransform pose; // Pasar la direccion de la pose a RenderItem para que se actualice automaticamente 
 	RenderItem* renderItem;
-	double remainingTime;
 private:
 	
 };

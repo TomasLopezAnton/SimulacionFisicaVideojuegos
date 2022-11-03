@@ -1,7 +1,7 @@
 #include "Rocket.h"
 #include <iostream>
 
-Rocket::Rocket(Vector3 Pos, Vector3 Vel, double Damp, Vector3 acc) : Particle(Pos, Vel, Damp, acc, 1000, { 0.1, 0.1, 0.1, 1.0 })
+Rocket::Rocket(Vector3 Pos, Vector3 Vel, double Damp, Vector3 acc, double time) : Particle(Pos, Vel, Damp, acc, time, { 0.1, 0.1, 0.1, 1.0 })
 {
 	jet = acc.x; 
 	grav.y = acc.y;
@@ -46,4 +46,17 @@ void Rocket::loadRenderItem()
 { 
 	Particle::loadRenderItem();
 	jetFire = new RenderItem(CreateShape(physx::PxSphereGeometry(0.5)), &jf_pose, { 0.8, 0.4, 0.0, 1.0 }); 
-};
+}
+std::list<Particle*> Rocket::onDeath()
+{
+	std::list<Particle*> l;
+
+	Particle* p = new Particle({ 0.0, -10000000, 0.0 }, { 0.0, 0.0, 0.0 }, 0.8, grav, 3, { 1.0, 0.5, 0.0, 1.0 }, 0.3);
+
+	GaussianParticleGenerator* g = new GaussianParticleGenerator("Explosion", p, pose.p, {0, 0, 0 }, {1, 1, 1}, {0.2, 0.2, 0.2 }, 100);
+
+	l = g->generateParticles();
+
+	return l;
+}
+;

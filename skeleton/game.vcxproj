@@ -276,6 +276,7 @@
   <ItemGroup>
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="Cannonball.h" />
+    <ClInclude Include="checkML.h" />
     <ClInclude Include="CircleGenerator.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="core.hpp" />
@@ -292,8 +293,8 @@
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
-    <ClInclude Include="ReproducingParticle.h" />
     <ClInclude Include="Rocket.h" />
+    <ClInclude Include="RocketSystem.h" />
     <ClInclude Include="TimedParticleSystem.h" />
     <ClInclude Include="UniformParticleGenerator.h" />
   </ItemGroup>

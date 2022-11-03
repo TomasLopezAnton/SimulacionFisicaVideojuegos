@@ -8,6 +8,7 @@ class ParticleSystem
 {
 public:
 	ParticleSystem() {};
+	~ParticleSystem();
 	virtual void update(double t);
 
 	ParticleGenerator* getParticleGenerator(std::string name);
