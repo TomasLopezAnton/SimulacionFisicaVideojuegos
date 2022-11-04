@@ -11,6 +11,7 @@ ParticleSystem::~ParticleSystem()
 
 void ParticleSystem::update(double t)
 {
+	#pragma region Generacion Continua
 	if (generating)
 	{
 		std::list<Particle*> l;
@@ -20,7 +21,9 @@ void ParticleSystem::update(double t)
 			for (Particle* p : l) particles.push_back(p);
 		}
 	}
+	#pragma endregion
 
+	#pragma region Update Particulas
 	std::list<Particle*>::iterator it = particles.begin();
 
 	while (it != particles.end())
@@ -41,4 +44,5 @@ void ParticleSystem::update(double t)
 
 		else it++;
 	}
+	#pragma endregion
 }

@@ -4,6 +4,7 @@ std::list<Particle*> GaussianParticleGenerator::generateParticles()
 {
 	randomGenerator = std::default_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
+	#pragma region Creamos Distribuciones
 	std::normal_distribution<double> disVelX(meanVel.x, stdDevVel.x);
 	std::normal_distribution<double> disVelY(meanVel.y, stdDevVel.y);
 	std::normal_distribution<double> disVelZ(meanVel.z, stdDevVel.z);
@@ -11,6 +12,7 @@ std::list<Particle*> GaussianParticleGenerator::generateParticles()
 	std::normal_distribution<double> disPosX(meanPos.x, stdDevPos.x);
 	std::normal_distribution<double> disPosY(meanPos.y, stdDevPos.y);
 	std::normal_distribution<double> disPosZ(meanPos.z, stdDevPos.z);
+	#pragma endregion
 
 	std::list<Particle*> l;
 

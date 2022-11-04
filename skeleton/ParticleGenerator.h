@@ -8,7 +8,7 @@
 class ParticleGenerator
 {
 public:
-	ParticleGenerator(std::string n, Particle* m, Vector3 p, Vector3 v, int num);
+	ParticleGenerator(std::string n, Particle* m, Vector3 p, Vector3 v, int num) : name(n), model(m), meanPos(p), meanVel(v), numParticles(num) {};
 	~ParticleGenerator() { delete model; }
 	void setParticle(Particle* m) { model = m; };
 	virtual std::list<Particle*> generateParticles() = 0;

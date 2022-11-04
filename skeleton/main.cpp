@@ -10,21 +10,10 @@
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
 #include "Particle.h"
-#include "Cannonball.h"
-#include "Fireball.h"
-#include "Laser.h"
 #include "Rocket.h"
-#include "ParticleGenerator.h"
-#include "UniformParticleGenerator.h"
 #include "GaussianParticleGenerator.h"
 #include "ParticleSystem.h"
 #include "FireworkSystem.h"
-
-
-#include <iostream>
-#include <istream>
-
-
 
 using namespace physx;
 
@@ -43,29 +32,18 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
+// Creamos el suelo
 physx::PxTransform floorPose = physx::PxTransform({ 0.0, 0.0, 0.0 });
 RenderItem* f;
 
-physx::PxTransform targetPose = physx::PxTransform({ 20.0, 60.0, 0.0 });
-RenderItem* target;
-
-std::vector<Laser*> laserBeam;
-
-Vector3 particleVelocity = { 25.0, 0.0, 0.0 };
-double fireVelocity = 10;
-double laserVelocity = 3000;
-Vector3 particleAcceleration = { 0.0, 1.0, 0.0 };
-Vector3 initialPos = { 0.0, 0.0, 0.0 };
-
-double particleDamping = 1;
-bool firingLaser = false;
-int maxLaserParticles = 100;
-
+// Creamos los sistemas de particulas
 std::vector<ParticleSystem*> particleSystems;
 ParticleSystem* bullets;
 ParticleSystem* font;
 FireworkSystem* fireworks;
 
+// Aceleracion de los cohetes
+double rocketJet = 10;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -93,12 +71,20 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 
+	#pragma region Inicializacion Suelo
+	// Inicializamos y registramos el suelo
 	f = new RenderItem(CreateShape(physx::PxBoxGeometry(1000.0, 1.0, 1000.0)), &floorPose, { 0.8, 0.8, 0.0, 1.0 });
 	RegisterRenderItem(f);
+	#pragma endregion
 
+	#pragma region Inicializacion Bullets
+	// Inicializamos el sistema de particulas que gestiona las particulas generales
 	bullets = new ParticleSystem();
 	particleSystems.push_back(bullets);
+	#pragma endregion
 
+	#pragma region Inicializacion Fuente
+	// Inicializamos la fuente
 	font = new ParticleSystem();
 
 	Particle* p = new Particle({ 0.0, -100000.0, 0.0 }, { 0.0, 0.0, 0.0 }, 0.95, { 0.0, 0.0, 0.0 }, 20.0, { 0.1, 0.2, 1.0, 1.0 }, 1.0);
@@ -106,9 +92,13 @@ void initPhysics(bool interactive)
 
 	font->addGenerator(new GaussianParticleGenerator((std::string)"FontGenerator", p, { 0.0, 0.0, 0.0 }, { 10.0, 30.0, 0.0 }, { 1.0, 1.0, 1.0 }, { 0.1, 0.1, 0.1 }, 3));
 	particleSystems.push_back(font);
+	#pragma endregion
 
+	#pragma region Inicializacion Fireworks
+	// Inicializamos los fuegos artificiales
 	fireworks = new FireworkSystem();
 	particleSystems.push_back(fireworks);
+	#pragma endregion
 
 	gScene = gPhysics->createScene(sceneDesc);
 }
@@ -121,6 +111,7 @@ void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
 
+	// Iteramos a traves de los sistemas de particulas para actualizarlos
 	for (ParticleSystem* system : particleSystems) system->update(t);
 
 	gScene->simulate(t);
@@ -137,7 +128,6 @@ void cleanupPhysics(bool interactive)
 	particleSystems.clear();
 
 	DeregisterRenderItem(f);
-
 	delete f;
 
 
@@ -160,22 +150,15 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	case 'B': 
-		bullets->addParticle(new Cannonball(GetCamera()->getEye(), 25 * GetCamera()->getDir(), particleDamping));
-		break;	
-	case 'F': 
-		bullets->addParticle(new Fireball(GetCamera()->getEye() + 2 * GetCamera()->getDir(), fireVelocity * GetCamera()->getDir(), 0.95));
-		break;	
-	case 'R':
-		bullets->addParticle(new Rocket(GetCamera()->getEye() + 2 * GetCamera()->getDir(), fireVelocity * GetCamera()->getDir(), 0.1, {1.0, 0.0, 0.0}, 8));
-		break;
-	case 'C':
+	case 'C': // Hacemos que la fuente empieze y pare de generar
 		font->generateContinously(!font->getGenerating());
 		break;
-	case 'K':
+	case 'F': // Creamos la primera particula de los fuegos artificiales
 		fireworks->createFirework();
 		break;
-	//case ' ':	break;
+	case 'R': // Creamos un cohete
+		bullets->addParticle(new Rocket(GetCamera()->getEye() + 2 * GetCamera()->getDir(), rocketJet * GetCamera()->getDir(), 0.1, { 1.0, 0.0, 0.0 }, 8));
+		break;
 	case ' ':
 	{
 		break;

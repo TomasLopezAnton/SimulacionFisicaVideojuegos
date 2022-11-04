@@ -8,6 +8,7 @@ public:
 	{
 		magnitude = v.magnitude(); 
 	};
+
 	std::list<Particle*> generateParticles();
 protected:
 private:

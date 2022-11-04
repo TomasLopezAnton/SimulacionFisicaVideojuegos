@@ -4,34 +4,13 @@
 void FireworkSystem::update(double t)
 {
 	ParticleSystem::update(t);
-
-	//std::list<Particle*>::iterator it = particles.begin();
-
-	//while(it != particles.end())
-	//{
-	//	if ((*it)->getTime() <= 0.0)
-	//	{
-	//		if(Firework* x = dynamic_cast<Firework*>((*it)))
-	//		{
-	//			std::list<Particle*> l = x->onDeath();
-
-	//			Particle* p = (*it);
-	//			it = particles.erase(it);
-
-	//			for (Particle* np : l) particles.push_back(np);
-
-	//			delete p;
-	//		}
-	//	}
-
-	//	else it++;
-	//}
 }
 
 void FireworkSystem::createFireworkRules()
 {
 	fireworkRules = std::vector<FireworkRule>(9);
 
+	#pragma region Inicializacion Reglas
 	fireworkRules[0].set(0, 0, 2, { -10.0, -10.0, -10.0 }, { 10.0, 10.0, 10.0 }, 0.999, {});
 	fireworkRules[1].set(1, 1, 2, { -20.0, 0.0, -20.0 }, { 20.0, 0.01, 20.0 }, 0.999, { {0, 30} });
 	fireworkRules[2].set(2, 2, 3, { -30.0, 0.01, -30.0 }, { 30.0, 5.0, 30.0 }, 0.999, { {1, 5}, {0, 10} });
@@ -40,6 +19,8 @@ void FireworkSystem::createFireworkRules()
 	fireworkRules[5].set(5, 4, 5, { -10.0, 130.0, -10.0 }, { 10.0, 150.0, 10.0 }, 0.999, { {0, 30}, {1,3}, {2,2}, {3, 1}, {4, 5}});
 	fireworkRules[6].set(6, 0.5, 1.5, { -10.0, -5.0, 0.0 }, { 20.0, 2.5, 0.01 }, 0.999, { {0, 10} });
 	fireworkRules[7].set(7, 2, 3, { -50.0, -5.0, 0.0 }, { 50.0, 0.0, 0.01 }, 0.999, { {6, 25} });
+	#pragma endregion
+
 }
 
 void FireworkSystem::createFirework()

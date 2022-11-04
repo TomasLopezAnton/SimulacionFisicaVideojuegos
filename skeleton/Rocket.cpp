@@ -28,10 +28,6 @@ void Rocket::integrate(double t)
 		time = 2;
 	}
 
-	
-	/*std::cout << "Initial acceleration: " << a.x << " " << a.y << " " << a.z << "\n";
-	std::cout << "Final acceleration: " << acc.x << " " << acc.y << " " << acc.z << "\n";*/
-
 	time--;
 }
 
@@ -47,10 +43,12 @@ void Rocket::loadRenderItem()
 	Particle::loadRenderItem();
 	jetFire = new RenderItem(CreateShape(physx::PxSphereGeometry(0.5)), &jf_pose, { 0.8, 0.4, 0.0, 1.0 }); 
 }
+
 std::list<Particle*> Rocket::onDeath()
 {
 	std::list<Particle*> l;
 
+	// Particula modelo
 	Particle* p = new Particle({ 0.0, -10000000, 0.0 }, { 0.0, 0.0, 0.0 }, 0.8, grav, 3, { 1.0, 0.5, 0.0, 1.0 }, 0.3);
 
 	GaussianParticleGenerator* g = new GaussianParticleGenerator("Explosion", p, pose.p, {0, 0, 0 }, {1, 1, 1}, {0.2, 0.2, 0.2 }, 100);

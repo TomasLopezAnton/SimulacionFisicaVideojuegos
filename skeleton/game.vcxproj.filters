@@ -46,9 +46,6 @@
     <ClCompile Include="FireworkGenerator.cpp">
       <Filter>ParticleGenerators</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleGenerator.cpp">
-      <Filter>ParticleGenerators</Filter>
-    </ClCompile>
     <ClCompile Include="CircleGenerator.cpp">
       <Filter>ParticleGenerators</Filter>
     </ClCompile>

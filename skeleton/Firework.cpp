@@ -15,12 +15,15 @@ std::list<Particle*> Firework::onDeath()
 	{
 		if (load.type >= rules.size()) return l;
 
+		#pragma region Inicializamos Particula modelo
 		Colors col;
 
 		FireworkRule rule = rules[load.type];
 
 		Particle* p = new Firework({ 0.0, -10000000, 0.0 }, { 0.0, 0.0, 0.0 }, rule.damping, grav, 0.01, rule.payloads, rule.type, rules, col.c[rule.type]);
-		//p->setGravity(grav);
+		#pragma endregion
+
+		#pragma region Generamos Particulas
 
 		Vector3 velDeviation = rule.maxVelocity - rule.minVelocity;
 		velDeviation = { std::abs(velDeviation.x), std::abs(velDeviation.y), std::abs(velDeviation.z) };
@@ -28,13 +31,13 @@ std::list<Particle*> Firework::onDeath()
 		FireworkGenerator* g = new FireworkGenerator("Firework", p, pose.p, (rule.maxVelocity + rule.minVelocity) / 2,
 			velDeviation, { 0.01, 0.01, 0.01 }, (rule.maxAge + rule.minAge) / 2, rule.maxAge - rule.minAge, load.count);
 
-		//particleGenerators.push_back(g);
-
 		std::list<Particle*> nl = g->generateParticles();
 
 		for (Particle* np : nl) l.push_back(np);
 
 		delete g;
+		#pragma endregion
+
 	}
 
 	return l;
