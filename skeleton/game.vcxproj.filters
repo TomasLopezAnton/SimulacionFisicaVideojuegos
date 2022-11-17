@@ -49,6 +49,9 @@
     <ClCompile Include="CircleGenerator.cpp">
       <Filter>ParticleGenerators</Filter>
     </ClCompile>
+    <ClCompile Include="GravityForceGenerator.cpp">
+      <Filter>ForceGenerators</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -108,6 +111,15 @@
     </ClInclude>
     <ClInclude Include="checkML.h" />
     <ClInclude Include="RocketSystem.h" />
+    <ClInclude Include="ForceGenerator.h">
+      <Filter>ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleForceRegistry.h">
+      <Filter>ForceGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="GravityForceGenerator.h">
+      <Filter>ForceGenerators</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
@@ -121,6 +133,9 @@
     </Filter>
     <Filter Include="ParticleGenerators">
       <UniqueIdentifier>{0380d0cf-7f66-46b9-a4ca-c6c6df83ba49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ForceGenerators">
+      <UniqueIdentifier>{94acb3a1-d7d7-479c-821c-d3cd1e160b94}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

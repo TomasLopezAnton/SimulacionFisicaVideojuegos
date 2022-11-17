@@ -3,12 +3,13 @@
 #include "RenderUtils.hpp"
 #include <string>
 #include <list>
+#include <iostream>
 
 class Particle
 {
 public:
-	Particle(Vector3 Pos, Vector3 Vel, double Damp, Vector3 Acc, double time = 1000, Vector4 col = {0.2, 0.4, 1.0, 1.0}, float Size = 1.0);
-	Particle(Vector3 Pos, Vector3 Vel, double Damp, Vector4 col = {1.0, 1.0, 1.0, 1.0});
+	Particle(Vector3 Pos, Vector3 Vel, double Mass, double Damp, Vector3 Acc, double time = 1000, Vector4 col = {0.2, 0.4, 1.0, 1.0}, float Size = 1.0);
+	Particle(Vector3 Pos, Vector3 Vel, double Mass, double Damp, Vector4 col = {1.0, 1.0, 1.0, 1.0});
 	~Particle();
 
 	virtual void integrate(double t);
@@ -19,11 +20,13 @@ public:
 
 	virtual std::list<Particle*> onDeath() { return std::list<Particle*>(); };
 
+	void clearForce() { force *= 0; }
+	
+	void addForce(const Vector3& f) { force += f; }
+
 	void setAcceleration(Vector3 a) { acc = a; };
 
 	void setVelocity(Vector3 v) { vel = v; };
-
-	void setGravity(Vector3 g) { grav = g; };
 
 	void setPosition(Vector3 p) { pose = physx::PxTransform(p.x, p.y, p.z); };
 
@@ -35,6 +38,10 @@ public:
 
 	Vector3 getPosition() { return pose.p; };
 
+	double getMass() { return mass; };
+
+	double getInvMass() { return inverseMass; };
+
 	double getTime() { return remainingTime; };
 
 	virtual int getType() { return -1; };
@@ -42,8 +49,10 @@ public:
 protected:
 	Vector3 vel;
 	Vector3 acc = {0.0, 0.0, 0.0};
-	Vector3 grav = {0.0, 0.0, 0.0};
+	Vector3 force = {0.0, 0.0, 0.0};
 	Vector4 col;
+	double mass;
+	double inverseMass;
 	double damp;
 	double size;
 	double remainingTime;

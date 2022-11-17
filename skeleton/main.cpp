@@ -87,8 +87,7 @@ void initPhysics(bool interactive)
 	// Inicializamos la fuente
 	font = new ParticleSystem();
 
-	Particle* p = new Particle({ 0.0, -100000.0, 0.0 }, { 0.0, 0.0, 0.0 }, 0.95, { 0.0, 0.0, 0.0 }, 20.0, { 0.1, 0.2, 1.0, 1.0 }, 1.0);
-	p->setGravity({ 0.0, -10, 0.0 });
+	Particle* p = new Particle({ 0.0, -100000.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.95, { 0.0, 0.0, 0.0 }, 20.0, { 0.1, 0.2, 1.0, 1.0 }, 1.0);
 
 	font->addGenerator(new GaussianParticleGenerator((std::string)"FontGenerator", p, { 0.0, 0.0, 0.0 }, { 10.0, 30.0, 0.0 }, { 1.0, 1.0, 1.0 }, { 0.1, 0.1, 0.1 }, 3));
 	particleSystems.push_back(font);
@@ -157,7 +156,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		fireworks->createFirework();
 		break;
 	case 'R': // Creamos un cohete
-		bullets->addParticle(new Rocket(GetCamera()->getEye() + 2 * GetCamera()->getDir(), rocketJet * GetCamera()->getDir(), 0.1, { 1.0, 0.0, 0.0 }, 8));
+		bullets->addParticle(new Rocket(GetCamera()->getEye() + 2 * GetCamera()->getDir(), rocketJet * GetCamera()->getDir(), 2000.0, 0.1, { 1.0, 0.0, 0.0 }, 8));
 		break;
 	case ' ':
 	{

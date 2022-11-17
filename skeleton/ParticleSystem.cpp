@@ -2,6 +2,8 @@
 
 ParticleSystem::~ParticleSystem()
 {
+	forceRegistry->clear();
+
 	for (Particle* p : particles) delete p;
 	particles.clear();
 
@@ -18,10 +20,16 @@ void ParticleSystem::update(double t)
 		for (ParticleGenerator* g : particleGenerators)
 		{
 			l = g->generateParticles();
-			for (Particle* p : l) particles.push_back(p);
+			for (Particle* p : l)
+			{
+				particles.push_back(p);
+				forceRegistry->addRegistry(gravGenerator, p);
+			}
 		}
 	}
 	#pragma endregion
+
+	forceRegistry->updateForces(t);
 
 	#pragma region Update Particulas
 	std::list<Particle*>::iterator it = particles.begin();
@@ -37,8 +45,13 @@ void ParticleSystem::update(double t)
 			Particle* p = (*it);
 			it = particles.erase(it);
 
-			for (Particle* np : l) particles.push_back(np);
+			for (Particle* np : l)
+			{
+				particles.push_back(np);
+				forceRegistry->addRegistry(gravGenerator, p);
+			}
 
+			forceRegistry->deleteParticleRegistry(p);
 			delete p;
 		}
 

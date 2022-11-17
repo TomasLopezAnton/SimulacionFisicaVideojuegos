@@ -8,7 +8,7 @@
 class Firework : public Particle
 {
 public:
-	Firework(Vector3 Pos, Vector3 Vel, double Damp, Vector3 Grv, double time, std::vector<Payload> p, int type, std::vector<FireworkRule> f, Vector4 col);
+	Firework(Vector3 Pos, Vector3 Vel, double Mass, double Damp, Vector3 Grv, double time, std::vector<Payload> p, int type, std::vector<FireworkRule> f, Vector4 col);
 	~Firework();
 
 	void integrate(double t) { Particle::integrate(t); };
@@ -20,7 +20,6 @@ public:
 
 	void loadRenderItem() { Particle::loadRenderItem(); };
 protected:
-	double mass = 0.1;
 private:
 	unsigned fireworkType;
 	std::vector<Payload> payloads;

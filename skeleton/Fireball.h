@@ -4,7 +4,7 @@
 class Fireball : public Particle
 {
 public:
-	Fireball(Vector3 Pos, Vector3 Vel, double Damp) : Particle(Pos, Vel, Damp, { 0.7, 0.3, 0.1, 1.0 }) {};
+	Fireball(Vector3 Pos, Vector3 Vel, double Mass, double Damp) : Particle(Pos, Vel, Mass, Damp, { 0.7, 0.3, 0.1, 1.0 }) {};
 	void integrate(double t) { Particle::integrate(t); };
 
 	Fireball* clone() const { Fireball* f = new Fireball(*this);  f->loadRenderItem(); return f; };
@@ -12,7 +12,6 @@ public:
 	void loadRenderItem() { Particle::loadRenderItem(); };
 
 protected:
-	double mass = 2.0;
 private:
 
 };

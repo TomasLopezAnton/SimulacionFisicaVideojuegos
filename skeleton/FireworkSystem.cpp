@@ -25,5 +25,7 @@ void FireworkSystem::createFireworkRules()
 
 void FireworkSystem::createFirework()
 {
-	particles.push_back(new Firework({ 0.0, 0.0, 0.0 }, fireworkRules[5].maxVelocity, 0.999, gravity, 2.5, fireworkRules[5].payloads, 5, fireworkRules, { 1.0, 0.0, 1.0, 1.0 }));
+	Particle* p = new Firework({ 0.0, 0.0, 0.0 }, fireworkRules[5].maxVelocity, 1.0, 0.999, gravity, 2.5, fireworkRules[5].payloads, 5, fireworkRules, { 1.0, 0.0, 1.0, 1.0 });
+	particles.push_back(p);
+	forceRegistry->addRegistry(gravGenerator, p);
 }
