@@ -1,5 +1,12 @@
 #include "ParticleSystem.h"
 
+ParticleSystem::ParticleSystem()
+{
+	forceRegistry = new ParticleForceRegistry();
+	gravGenerator = new GravityForceGenerator(gravity);
+	windGenerator = new WindForceGenerator({ -50.0, 50.0, -100.0 }, 0.1, 0.001, {0.0, 30.0, 0.0}, 2.0, 100.0);
+}
+
 ParticleSystem::~ParticleSystem()
 {
 	forceRegistry->clear();
@@ -24,6 +31,7 @@ void ParticleSystem::update(double t)
 			{
 				particles.push_back(p);
 				forceRegistry->addRegistry(gravGenerator, p);
+				forceRegistry->addRegistry(windGenerator, p);
 			}
 		}
 	}

@@ -36,7 +36,7 @@ void Particle::integrate(double t)
 
 	vel = (vel + totalAcceleration * t) * pow(damp, t);
 	pose = physx::PxTransform(pose.p.x + vel.x * t, pose.p.y + vel.y * t, pose.p.z + vel.z * t);
-
+	
 	remainingTime -= t;
 	clearForce();
 }

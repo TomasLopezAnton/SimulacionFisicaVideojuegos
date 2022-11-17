@@ -272,6 +272,7 @@
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="TimedParticleSystem.cpp" />
     <ClCompile Include="UniformParticleGenerator.cpp" />
+    <ClCompile Include="WindForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="callbacks.hpp" />
@@ -300,6 +301,7 @@
     <ClInclude Include="RocketSystem.h" />
     <ClInclude Include="TimedParticleSystem.h" />
     <ClInclude Include="UniformParticleGenerator.h" />
+    <ClInclude Include="WindForceGenerator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -21,14 +21,12 @@ public:
 	void deleteParticleRegistry(Particle* p) 
 	{
 		auto it = begin();
-		bool found = false;
 
-		while(!found && it != end())
+		while(it != end())
 		{
 			if (it->second == p)
 			{
 				it = erase(it);
-				found = true;
 			}
 
 			else it++;

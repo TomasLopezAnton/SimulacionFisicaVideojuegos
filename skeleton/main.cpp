@@ -39,7 +39,7 @@ RenderItem* f;
 // Creamos los sistemas de particulas
 std::vector<ParticleSystem*> particleSystems;
 ParticleSystem* bullets;
-ParticleSystem* font;
+ParticleSystem* smoke;
 FireworkSystem* fireworks;
 
 // Aceleracion de los cohetes
@@ -84,13 +84,13 @@ void initPhysics(bool interactive)
 	#pragma endregion
 
 	#pragma region Inicializacion Fuente
-	// Inicializamos la fuente
-	font = new ParticleSystem();
+	// Inicializamos el humo
+	smoke = new ParticleSystem();
 
-	Particle* p = new Particle({ 0.0, -100000.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.95, { 0.0, 0.0, 0.0 }, 20.0, { 0.1, 0.2, 1.0, 1.0 }, 1.0);
+	Particle* p = new Particle({ 0.0, -100000.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.95, { 0.0, 0.0, 0.0 }, 20.0, { 0.1, 0.1, 0.1, 1.0 }, 1.0);
 
-	font->addGenerator(new GaussianParticleGenerator((std::string)"FontGenerator", p, { 0.0, 0.0, 0.0 }, { 10.0, 30.0, 0.0 }, { 1.0, 1.0, 1.0 }, { 0.1, 0.1, 0.1 }, 3));
-	particleSystems.push_back(font);
+	smoke->addGenerator(new GaussianParticleGenerator((std::string)"FontGenerator", p, { 0.0, 0.0, 0.0 }, { 0.0, 30.0, 0.0 }, { 10.0, 2.0, 10.0 }, { 3.0, 0.1, 3.0 }, 10));
+	particleSystems.push_back(smoke);
 	#pragma endregion
 
 	#pragma region Inicializacion Fireworks
@@ -150,7 +150,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	switch(toupper(key))
 	{
 	case 'C': // Hacemos que la fuente empieze y pare de generar
-		font->generateContinously(!font->getGenerating());
+		smoke->generateContinously(!smoke->getGenerating());
 		break;
 	case 'F': // Creamos la primera particula de los fuegos artificiales
 		fireworks->createFirework();

@@ -5,11 +5,12 @@
 #include "ParticleGenerator.h"
 #include "ParticleForceRegistry.h"
 #include "GravityForceGenerator.h"
+#include "WindForceGenerator.h"
 
 class ParticleSystem 
 {
 public:
-	ParticleSystem() { forceRegistry = new ParticleForceRegistry(); gravGenerator = new GravityForceGenerator(gravity); };
+	ParticleSystem();
 	~ParticleSystem();
 	virtual void update(double t);
 
@@ -30,6 +31,7 @@ protected:
 	std::list<ParticleGenerator*> particleGenerators;
 	ParticleForceRegistry* forceRegistry;
 	GravityForceGenerator* gravGenerator;
+	WindForceGenerator* windGenerator;
 	Vector3 gravity = {0.0, -10.0, 0.0};
 	Vector3 bounds = { 0.0, -0.01, 0.0 };
 private:
