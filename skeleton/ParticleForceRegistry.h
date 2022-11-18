@@ -32,4 +32,6 @@ public:
 			else it++;
 		}
 	};
+
+	void deleteForceRegistry(ForceGenerator* g) { erase(g); };
 };

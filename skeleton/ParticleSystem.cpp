@@ -17,6 +17,9 @@ ParticleSystem::~ParticleSystem()
 
 	for (ParticleGenerator* g : particleGenerators) delete g;
 	particleGenerators.clear();
+
+	forceGenerators.clear();
+	forceRegistry->clear();
 }
 
 void ParticleSystem::update(double t)
@@ -70,3 +73,30 @@ void ParticleSystem::update(double t)
 	}
 	#pragma endregion
 }
+
+void ParticleSystem::removeForceGenerator(ForceGenerator* g)
+{
+	forceRegistry->deleteForceRegistry(g);
+	forceGenerators.remove(g);
+}
+
+bool ParticleSystem::containsForceGenerator(ForceGenerator* g)
+{
+	bool found = false;
+	std::list<ForceGenerator*>::iterator it = forceGenerators.begin();
+
+	while(!found && it != forceGenerators.end())
+	{
+		found = (*it) == g;
+		it++;
+	}
+
+	return found;
+}
+
+void ParticleSystem::addForceGenerator(ForceGenerator* g) 
+{ 
+	forceGenerators.push_back(g);
+
+	for(Particle* p : particles) forceRegistry->addRegistry(g, p);
+};

@@ -5,6 +5,8 @@ void ExplosionForceGenerator::updateForce(Particle* p, double t)
 {
 	if (fabs(p->getInvMass()) < 1e-10) return;
 
+	radius += velocity * t; // El radio aumenta con el tiempo
+
 	Vector3 aux = p->getPosition() - position;
 	double r = sqrt((aux.x * aux.x + aux.y * aux.y + aux.z * aux.z));
 

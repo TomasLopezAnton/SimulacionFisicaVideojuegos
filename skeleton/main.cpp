@@ -12,6 +12,7 @@
 #include "Particle.h"
 #include "Rocket.h"
 #include "GaussianParticleGenerator.h"
+#include "UniformParticleGenerator.h"
 #include "ParticleSystem.h"
 #include "FireworkSystem.h"
 #include "WindForceGenerator.h"
@@ -45,6 +46,11 @@ ParticleSystem* bullets;
 ParticleSystem* smoke;
 FireworkSystem* fireworks;
 
+// Sistemas de fuerzas
+WindForceGenerator* windGenerator;
+VortexGenerator* vortex;
+ExplosionForceGenerator* explosion;
+
 // Aceleracion de los cohetes
 double rocketJet = 10;
 
@@ -76,14 +82,8 @@ void initPhysics(bool interactive)
 
 	#pragma region Inicializacion Suelo
 	// Inicializamos y registramos el suelo
-	f = new RenderItem(CreateShape(physx::PxBoxGeometry(500.0, 1.0, 500.0)), &floorPose, { 0.8, 0.8, 0.0, 1.0 });
+	f = new RenderItem(CreateShape(physx::PxBoxGeometry(250.0, 1.0, 250.0)), &floorPose, { 0.8, 0.8, 0.0, 1.0 });
 	RegisterRenderItem(f);
-	#pragma endregion
-
-	#pragma region Inicializacion Bullets
-	// Inicializamos el sistema de particulas que gestiona las particulas generales
-	bullets = new ParticleSystem();
-	particleSystems.push_back(bullets);
 	#pragma endregion
 
 	#pragma region Inicializacion Humo
@@ -91,25 +91,16 @@ void initPhysics(bool interactive)
 	smoke = new ParticleSystem();
 	smoke->setGravity({ 0.0, -1.0, 0.0 });
 
-	WindForceGenerator* windGenerator = new WindForceGenerator({ -100.0, 0.0, -100.0 }, 0.1, 0.001, { 0.0, 50.0, 0.0 }, 2.0, 100.0);
-	VortexGenerator* vortex = new VortexGenerator(1, { -0.0, 0.0,  -0.0 }, 20);
-	ExplosionForceGenerator* explosion = new ExplosionForceGenerator(100, 2, Vector3(20.0, 5.0, 20.0), 30);
-
 	Particle* p = new Particle({ 0.0, -100000.0, 0.0 }, { 0.0, 0.0, 0.0 }, 0.2, 0.95, { 0.0, 0.0, 0.0 }, 8.0, { 0.1, 0.1, 0.1, 1.0 }, 1.0);
 
-	smoke->addGenerator(new GaussianParticleGenerator((std::string)"FontGenerator", p, { 0.0, 5.0, 0.0 }, { 0.0, 10.0, 0.0 }, { 0.1, 0.1, 0.1 }, { 180.0, 0.1, 180.0 }, 10));
-	//smoke->addForceGenerator(windGenerator);
-	//smoke->addForceGenerator(vortex);
-	smoke->addForceGenerator(explosion);
+	smoke->addGenerator(new UniformParticleGenerator((std::string)"FontGenerator", p, { 0.0, 25.0, 0.0 }, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, { 240.0, 23.0, 240.0 }, 10));
 	particleSystems.push_back(smoke);
 	#pragma endregion
 
-	#pragma region Inicializacion Fireworks
-	// Inicializamos los fuegos artificiales
-	fireworks = new FireworkSystem();
-	fireworks->addForceGenerator(windGenerator);
-	//fireworks->addForceGenerator(vortex);
-	particleSystems.push_back(fireworks);
+	#pragma region Inicializacion Fuerzas
+	windGenerator = new WindForceGenerator({ -40.0, 0.0, -40.0 }, 0.1, 0.001, { 0.0, 0.0, 0.0 }, 2.0, 100.0);
+	vortex = new VortexGenerator(0.2, { -0.0, 0.0,  -0.0 }, 100);
+	explosion = new ExplosionForceGenerator(200, 2, Vector3(20.0, 5.0, 20.0), 0.1, 240.0);
 	#pragma endregion
 
 	gScene = gPhysics->createScene(sceneDesc);
@@ -162,14 +153,24 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	case 'C': // Hacemos que la fuente empieze y pare de generar
+	case'H': // Hace toggle a las particulas de humo/polvo que manipularemos con las fuerzas
 		smoke->generateContinously(!smoke->getGenerating());
 		break;
-	case 'F': // Creamos la primera particula de los fuegos artificiales
-		fireworks->createFirework();
+	case 'V': // Activa una rafaga de viento entre las dos alturas especificadas
+		if (smoke->containsForceGenerator(windGenerator)) smoke->removeForceGenerator(windGenerator);
+		else smoke->addForceGenerator(windGenerator);
 		break;
-	case 'R': // Creamos un cohete
-		bullets->addParticle(new Rocket(GetCamera()->getEye() + 2 * GetCamera()->getDir(), rocketJet * GetCamera()->getDir(), 2000.0, 0.1, { 1.0, 0.0, 0.0 }, 8));
+	case 'T': // Activa el remolino
+		if (smoke->containsForceGenerator(vortex)) smoke->removeForceGenerator(vortex);
+		else smoke->addForceGenerator(vortex);
+		break;
+	case 'E': // Activa una explosion que crece con el tiempo
+		if (smoke->containsForceGenerator(explosion)) smoke->removeForceGenerator(explosion);
+		else
+		{
+			explosion->setRadius(0.0);
+			smoke->addForceGenerator(explosion);
+		}
 		break;
 	case ' ':
 	{

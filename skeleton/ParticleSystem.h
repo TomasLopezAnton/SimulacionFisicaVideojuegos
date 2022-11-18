@@ -19,12 +19,16 @@ public:
 
 	void addParticle(Particle* p) { particles.push_back(p); forceRegistry->addRegistry(gravGenerator, p); };
 	void addGenerator(ParticleGenerator* g) { particleGenerators.push_back(g); };
-	void addForceGenerator(ForceGenerator* g) { forceGenerators.push_back(g); };
+	void addForceGenerator(ForceGenerator* g);
+
+	void removeForceGenerator(ForceGenerator* g);
 
 	void generateContinously(bool b) { generating = b; }
 
 	Vector3 getGravity() { return gravity; }
+
 	bool getGenerating() { return generating; }
+	bool containsForceGenerator(ForceGenerator* g);
 
 	void setGravity(Vector3 g) { gravity = g; gravGenerator->setGravity(g); }
 
