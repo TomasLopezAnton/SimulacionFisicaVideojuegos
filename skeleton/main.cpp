@@ -14,6 +14,9 @@
 #include "GaussianParticleGenerator.h"
 #include "ParticleSystem.h"
 #include "FireworkSystem.h"
+#include "WindForceGenerator.h"
+#include "VortexGenerator.h"
+#include "ExplosionForceGenerator.h"
 
 using namespace physx;
 
@@ -73,7 +76,7 @@ void initPhysics(bool interactive)
 
 	#pragma region Inicializacion Suelo
 	// Inicializamos y registramos el suelo
-	f = new RenderItem(CreateShape(physx::PxBoxGeometry(1000.0, 1.0, 1000.0)), &floorPose, { 0.8, 0.8, 0.0, 1.0 });
+	f = new RenderItem(CreateShape(physx::PxBoxGeometry(500.0, 1.0, 500.0)), &floorPose, { 0.8, 0.8, 0.0, 1.0 });
 	RegisterRenderItem(f);
 	#pragma endregion
 
@@ -83,19 +86,29 @@ void initPhysics(bool interactive)
 	particleSystems.push_back(bullets);
 	#pragma endregion
 
-	#pragma region Inicializacion Fuente
+	#pragma region Inicializacion Humo
 	// Inicializamos el humo
 	smoke = new ParticleSystem();
+	smoke->setGravity({ 0.0, -1.0, 0.0 });
 
-	Particle* p = new Particle({ 0.0, -100000.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.95, { 0.0, 0.0, 0.0 }, 20.0, { 0.1, 0.1, 0.1, 1.0 }, 1.0);
+	WindForceGenerator* windGenerator = new WindForceGenerator({ -100.0, 0.0, -100.0 }, 0.1, 0.001, { 0.0, 50.0, 0.0 }, 2.0, 100.0);
+	VortexGenerator* vortex = new VortexGenerator(1, { -0.0, 0.0,  -0.0 }, 20);
+	//ExplosionForceGenerator* explosion = new ExplosionForceGenerator(0.1, 2, )
 
-	smoke->addGenerator(new GaussianParticleGenerator((std::string)"FontGenerator", p, { 0.0, 0.0, 0.0 }, { 0.0, 30.0, 0.0 }, { 10.0, 2.0, 10.0 }, { 3.0, 0.1, 3.0 }, 10));
+	Particle* p = new Particle({ 0.0, -100000.0, 0.0 }, { 0.0, 0.0, 0.0 }, 0.2, 0.95, { 0.0, 0.0, 0.0 }, 8.0, { 0.1, 0.1, 0.1, 1.0 }, 1.0);
+
+	smoke->addGenerator(new GaussianParticleGenerator((std::string)"FontGenerator", p, { 0.0, 5.0, 0.0 }, { 0.0, 10.0, 0.0 }, { 0.1, 0.1, 0.1 }, { 180.0, 0.1, 180.0 }, 10));
+	smoke->addForceGenerator(windGenerator);
+	smoke->addForceGenerator(vortex);
+	smoke->addForceGenerator()
 	particleSystems.push_back(smoke);
 	#pragma endregion
 
 	#pragma region Inicializacion Fireworks
 	// Inicializamos los fuegos artificiales
 	fireworks = new FireworkSystem();
+	fireworks->addForceGenerator(windGenerator);
+	//fireworks->addForceGenerator(vortex);
 	particleSystems.push_back(fireworks);
 	#pragma endregion
 

@@ -4,7 +4,8 @@ ParticleSystem::ParticleSystem()
 {
 	forceRegistry = new ParticleForceRegistry();
 	gravGenerator = new GravityForceGenerator(gravity);
-	windGenerator = new WindForceGenerator({ -50.0, 50.0, -100.0 }, 0.1, 0.001, {0.0, 30.0, 0.0}, 2.0, 100.0);
+
+	forceGenerators.push_back(gravGenerator);
 }
 
 ParticleSystem::~ParticleSystem()
@@ -20,6 +21,7 @@ ParticleSystem::~ParticleSystem()
 
 void ParticleSystem::update(double t)
 {
+
 	#pragma region Generacion Continua
 	if (generating)
 	{
@@ -30,8 +32,8 @@ void ParticleSystem::update(double t)
 			for (Particle* p : l)
 			{
 				particles.push_back(p);
-				forceRegistry->addRegistry(gravGenerator, p);
-				forceRegistry->addRegistry(windGenerator, p);
+
+				for(ForceGenerator* fg : forceGenerators) forceRegistry->addRegistry(fg, p);
 			}
 		}
 	}
@@ -56,7 +58,8 @@ void ParticleSystem::update(double t)
 			for (Particle* np : l)
 			{
 				particles.push_back(np);
-				forceRegistry->addRegistry(gravGenerator, p);
+
+				for (ForceGenerator* fg : forceGenerators) forceRegistry->addRegistry(fg, np);
 			}
 
 			forceRegistry->deleteParticleRegistry(p);
