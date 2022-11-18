@@ -93,14 +93,14 @@ void initPhysics(bool interactive)
 
 	WindForceGenerator* windGenerator = new WindForceGenerator({ -100.0, 0.0, -100.0 }, 0.1, 0.001, { 0.0, 50.0, 0.0 }, 2.0, 100.0);
 	VortexGenerator* vortex = new VortexGenerator(1, { -0.0, 0.0,  -0.0 }, 20);
-	//ExplosionForceGenerator* explosion = new ExplosionForceGenerator(0.1, 2, )
+	ExplosionForceGenerator* explosion = new ExplosionForceGenerator(100, 2, Vector3(20.0, 5.0, 20.0), 30);
 
 	Particle* p = new Particle({ 0.0, -100000.0, 0.0 }, { 0.0, 0.0, 0.0 }, 0.2, 0.95, { 0.0, 0.0, 0.0 }, 8.0, { 0.1, 0.1, 0.1, 1.0 }, 1.0);
 
 	smoke->addGenerator(new GaussianParticleGenerator((std::string)"FontGenerator", p, { 0.0, 5.0, 0.0 }, { 0.0, 10.0, 0.0 }, { 0.1, 0.1, 0.1 }, { 180.0, 0.1, 180.0 }, 10));
-	smoke->addForceGenerator(windGenerator);
-	smoke->addForceGenerator(vortex);
-	smoke->addForceGenerator()
+	//smoke->addForceGenerator(windGenerator);
+	//smoke->addForceGenerator(vortex);
+	smoke->addForceGenerator(explosion);
 	particleSystems.push_back(smoke);
 	#pragma endregion
 
