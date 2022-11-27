@@ -12,13 +12,13 @@ Particle::Particle(Vector3 Pos, Vector3 Vel, double Mass, double damping, Vector
 	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(size)), &pose, col);
 }
 
-Particle::Particle(Vector3 Pos, Vector3 Vel, double Mass, double damping, Vector4 col) : vel(Vel), damp(damping), col(col)
+Particle::Particle(Vector3 Pos, Vector3 Vel, double Mass, double damping, Vector4 col, double time, physx::PxGeometry* shape) : vel(Vel), damp(damping), col(col), remainingTime(time)
 {
 	mass = Mass;
 	inverseMass = 1.0 / mass;
 
 	pose = physx::PxTransform(Pos.x, Pos.y, Pos.z);
-	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(1.0)), &pose, col);
+	renderItem = new RenderItem(CreateShape(*shape), &pose, col);
 }
 
 Particle::~Particle()

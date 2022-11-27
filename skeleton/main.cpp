@@ -13,8 +13,12 @@
 #include "Rocket.h"
 #include "GaussianParticleGenerator.h"
 #include "UniformParticleGenerator.h"
+
 #include "ParticleSystem.h"
 #include "FireworkSystem.h"
+#include "ContinuousParticleSystem.h"
+#include "SpringParticleSystem.h"
+
 #include "WindForceGenerator.h"
 #include "VortexGenerator.h"
 #include "ExplosionForceGenerator.h"
@@ -43,7 +47,8 @@ RenderItem* f;
 // Creamos los sistemas de particulas
 std::vector<ParticleSystem*> particleSystems;
 ParticleSystem* bullets;
-ParticleSystem* smoke;
+ContinuousParticleSystem* smoke;
+SpringParticleSystem* springs;
 FireworkSystem* fireworks;
 
 // Sistemas de fuerzas
@@ -86,9 +91,13 @@ void initPhysics(bool interactive)
 	RegisterRenderItem(f);
 	#pragma endregion
 
+	springs = new SpringParticleSystem();
+	springs->setGravity({ 0.0, -1.0, 0.0 });
+	particleSystems.push_back(springs);
+
 	#pragma region Inicializacion Humo
 	// Inicializamos el humo
-	smoke = new ParticleSystem();
+	smoke = new ContinuousParticleSystem();
 	smoke->setGravity({ 0.0, -1.0, 0.0 });
 
 	Particle* p = new Particle({ 0.0, -100000.0, 0.0 }, { 0.0, 0.0, 0.0 }, 0.2, 0.95, { 0.0, 0.0, 0.0 }, 8.0, { 0.1, 0.1, 0.1, 1.0 }, 1.0);
@@ -153,24 +162,43 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	case'H': // Hace toggle a las particulas de humo/polvo que manipularemos con las fuerzas
+	case 'H': // Hace toggle a las particulas de humo/polvo que manipularemos con las fuerzas
 		smoke->generateContinously(!smoke->getGenerating());
 		break;
 	case 'V': // Activa una rafaga de viento entre las dos alturas especificadas
-		if (smoke->containsForceGenerator(windGenerator)) smoke->removeForceGenerator(windGenerator);
-		else smoke->addForceGenerator(windGenerator);
+		for (ParticleSystem* p : particleSystems)
+		{
+			if (p->containsForceGenerator(windGenerator)) p->removeForceGenerator(windGenerator);
+			else p->addForceGenerator(windGenerator);
+		}
 		break;
 	case 'T': // Activa el remolino
-		if (smoke->containsForceGenerator(vortex)) smoke->removeForceGenerator(vortex);
-		else smoke->addForceGenerator(vortex);
+		for(ParticleSystem* p : particleSystems)
+		{
+			if (p->containsForceGenerator(vortex)) p->removeForceGenerator(vortex);
+			else p->addForceGenerator(vortex);
+		}
 		break;
 	case 'E': // Activa una explosion que crece con el tiempo
-		if (smoke->containsForceGenerator(explosion)) smoke->removeForceGenerator(explosion);
-		else
+		for (ParticleSystem* p : particleSystems)
 		{
-			explosion->setRadius(0.0);
-			smoke->addForceGenerator(explosion);
+			if (p->containsForceGenerator(explosion)) p->removeForceGenerator(explosion);
+			else
+			{
+				explosion->setRadius(0.0);
+				p->addForceGenerator(explosion);
+			}
 		}
+
+		break;
+	case 'M':
+		springs->generateDualSpring();
+		break;
+	case 'N':
+		springs->generateAnchoredSpring();
+		break;	
+	case 'B':
+		springs->generateBungeeSpring();
 		break;
 	case ' ':
 	{

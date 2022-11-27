@@ -23,11 +23,8 @@ public:
 
 	void removeForceGenerator(ForceGenerator* g);
 
-	void generateContinously(bool b) { generating = b; }
-
 	Vector3 getGravity() { return gravity; }
 
-	bool getGenerating() { return generating; }
 	bool containsForceGenerator(ForceGenerator* g);
 
 	void setGravity(Vector3 g) { gravity = g; gravGenerator->setGravity(g); }
@@ -41,5 +38,5 @@ protected:
 	Vector3 gravity = {0.0, -10.0, 0.0};
 	Vector3 bounds = { 0.0, -0.01, 0.0 };
 private:
-	bool generating = false;
+
 };

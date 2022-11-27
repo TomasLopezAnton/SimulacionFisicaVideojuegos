@@ -253,9 +253,12 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnchoredSpringFG.cpp" />
+    <ClCompile Include="BungeeForceGenerator.cpp" />
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="Cannonball.cpp" />
     <ClCompile Include="CircleGenerator.cpp" />
+    <ClCompile Include="ContinuousParticleSystem.cpp" />
     <ClCompile Include="ExplosionForceGenerator.cpp" />
     <ClCompile Include="Fireball.cpp" />
     <ClCompile Include="Firework.cpp" />
@@ -271,17 +274,22 @@
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
     <ClCompile Include="Rocket.cpp" />
+    <ClCompile Include="SpringForceGenerator.cpp" />
+    <ClCompile Include="SpringParticleSystem.cpp" />
     <ClCompile Include="TimedParticleSystem.cpp" />
     <ClCompile Include="UniformParticleGenerator.cpp" />
     <ClCompile Include="VortexGenerator.cpp" />
     <ClCompile Include="WindForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnchoredSpringFG.h" />
+    <ClInclude Include="BungeeForceGenerator.h" />
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="Cannonball.h" />
     <ClInclude Include="checkML.h" />
     <ClInclude Include="CircleGenerator.h" />
     <ClInclude Include="Colors.h" />
+    <ClInclude Include="ContinuousParticleSystem.h" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="ExplosionForceGenerator.h" />
     <ClInclude Include="Fireball.h" />
@@ -302,6 +310,8 @@
     <ClInclude Include="Render\Render.h" />
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="RocketSystem.h" />
+    <ClInclude Include="SpringForceGenerator.h" />
+    <ClInclude Include="SpringParticleSystem.h" />
     <ClInclude Include="TimedParticleSystem.h" />
     <ClInclude Include="UniformParticleGenerator.h" />
     <ClInclude Include="VortexGenerator.h" />

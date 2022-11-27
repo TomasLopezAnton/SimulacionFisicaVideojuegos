@@ -9,7 +9,7 @@ class Particle
 {
 public:
 	Particle(Vector3 Pos, Vector3 Vel, double Mass, double Damp, Vector3 Acc, double time = 1000, Vector4 col = {0.2, 0.4, 1.0, 1.0}, float Size = 1.0);
-	Particle(Vector3 Pos, Vector3 Vel, double Mass, double Damp, Vector4 col = {1.0, 1.0, 1.0, 1.0});
+	Particle(Vector3 Pos, Vector3 Vel, double Mass, double Damp, Vector4 col = {1.0, 1.0, 1.0, 1.0}, double time = 1000, physx::PxGeometry* shape = new physx::PxSphereGeometry(1.0));
 	~Particle();
 
 	virtual void integrate(double t);
@@ -26,8 +26,8 @@ public:
 
 	void setAcceleration(Vector3 a) { acc = a; };
 
-	void setVelocity(Vector3 v) { vel = v; };
 
+	void setVelocity(Vector3 v) { vel = v; };
 	void setPosition(Vector3 p) { pose = physx::PxTransform(p.x, p.y, p.z); };
 
 	void setTime(int t) { remainingTime = t; };
