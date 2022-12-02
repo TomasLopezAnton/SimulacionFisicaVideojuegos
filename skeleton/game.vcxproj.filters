@@ -76,6 +76,9 @@
     <ClCompile Include="BungeeForceGenerator.cpp">
       <Filter>ForceGenerators\Springs</Filter>
     </ClCompile>
+    <ClCompile Include="BuoyancyForceGenerator.cpp">
+      <Filter>ForceGenerators\Springs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -166,6 +169,9 @@
       <Filter>ForceGenerators\Springs</Filter>
     </ClInclude>
     <ClInclude Include="BungeeForceGenerator.h">
+      <Filter>ForceGenerators\Springs</Filter>
+    </ClInclude>
+    <ClInclude Include="BuoyancyForceGenerator.h">
       <Filter>ForceGenerators\Springs</Filter>
     </ClInclude>
   </ItemGroup>

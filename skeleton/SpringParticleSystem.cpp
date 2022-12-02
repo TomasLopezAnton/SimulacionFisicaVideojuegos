@@ -53,3 +53,18 @@ void SpringParticleSystem::generateBungeeSpring()
 	forceRegistry->addRegistry(f2, p2);
 	forceRegistry->addRegistry(gravGenerator, p2);
 }
+
+void SpringParticleSystem::generateBuoyantParticle()
+{
+	Particle* liquid = new Particle({ 0.0, 50.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1e6, 0.99, { 0.0, 0.0, 1.0, 1.0 }, 1e6, new physx::PxBoxGeometry(10.0, 1, 10.0));
+	Particle* p = new Particle({ 0.0, 52.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.8, { 1.0, 0.0, 0.0, 1.0 }, 1e6);
+
+	particles.push_back(liquid);
+	particles.push_back(p);
+
+	BuoyancyForceGenerator* f = new BuoyancyForceGenerator(1, 20.0, 1000.0, -gravity.y, liquid);
+	forceGenerators.push_back(f);
+
+	forceRegistry->addRegistry(f, p);
+	forceRegistry->addRegistry(gravGenerator, p);
+}

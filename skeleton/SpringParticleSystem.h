@@ -2,6 +2,7 @@
 #include "ParticleSystem.h"
 #include "AnchoredSpringFG.h"
 #include "BungeeForceGenerator.h"
+#include "BuoyancyForceGenerator.h"
 
 class SpringParticleSystem : public ParticleSystem
 {
@@ -14,6 +15,7 @@ public:
 	void generateAnchoredSpring();
 	void generateDualSpring();
 	void generateBungeeSpring();
+	void generateBuoyantParticle();
 
 protected:
 private:

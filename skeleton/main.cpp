@@ -200,6 +200,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case 'B':
 		springs->generateBungeeSpring();
 		break;
+	case'F':
+		springs->generateBuoyantParticle();
+		break;
 	case ' ':
 	{
 		break;
