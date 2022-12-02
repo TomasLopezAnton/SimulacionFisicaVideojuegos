@@ -16,7 +16,9 @@ public:
 	void generateDualSpring();
 	void generateBungeeSpring();
 	void generateBuoyantParticle();
+	void clearSystem();
 
 protected:
 private:
+	Particle* water = nullptr;
 };

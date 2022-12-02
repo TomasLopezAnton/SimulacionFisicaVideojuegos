@@ -55,6 +55,7 @@ protected:
 	double inverseMass;
 	double damp;
 	double size;
+	double volume;
 	double remainingTime;
 	physx::PxTransform pose; // Pasar la direccion de la pose a RenderItem para que se actualice automaticamente 
 	RenderItem* renderItem;

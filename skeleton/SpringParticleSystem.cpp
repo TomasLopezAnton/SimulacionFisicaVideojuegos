@@ -7,8 +7,8 @@ void SpringParticleSystem::update(double t)
 
 void SpringParticleSystem::generateAnchoredSpring()
 {
-	Particle* p = new Particle({ -10.0, 20.0, 0.0 }, { 0.0, 0.0, 0.0 }, 2.0, 0.85, { 0.0, 0.0, 1.0, 1.0 });
-	AnchoredSpringFG* f = new AnchoredSpringFG(1, 10, { 10.0, 20.0, 0.0 });
+	Particle* p = new Particle({ -10.0, 50.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.85, { 0.0, 0.0, 1.0, 1.0 });
+	AnchoredSpringFG* f = new AnchoredSpringFG(1, 10, { 10.0, 50.0, 0.0 });
 
 	particles.push_back(p);
 	particles.push_back(f->getOther());
@@ -19,8 +19,8 @@ void SpringParticleSystem::generateAnchoredSpring()
 
 void SpringParticleSystem::generateDualSpring()
 {
-	Particle* p1 = new Particle({ -10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }, 10.0, 0.85, { 1.0, 0.0, 0.0, 1.0 });
-	Particle* p2 = new Particle({ 10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }, 2.0, 0.85, { 0.0, 0.0, 1.0, 1.0 });
+	Particle* p1 = new Particle({ -10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.85, { 1.0, 0.0, 0.0, 1.0 });
+	Particle* p2 = new Particle({ 10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.85, { 0.0, 0.0, 1.0, 1.0 });
 	particles.push_back(p1);
 	particles.push_back(p2);
 
@@ -38,8 +38,8 @@ void SpringParticleSystem::generateDualSpring()
 
 void SpringParticleSystem::generateBungeeSpring()
 {
-	Particle* p1 = new Particle({ -10.0, 30.0, 0.0 }, { 0.0, 0.0, 0.0 }, 10.0, 0.85, { 1.0, 0.0, 0.0, 1.0 });
-	Particle* p2 = new Particle({ 10.0, 30.0, 0.0 }, { 0.0, 0.0, 0.0 }, 2.0, 0.85, { 0.0, 0.0, 1.0, 1.0 });
+	Particle* p1 = new Particle({ -10.0, 30.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.85, { 1.0, 0.0, 0.0, 1.0 });
+	Particle* p2 = new Particle({ 10.0, 30.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.85, { 0.0, 0.0, 1.0, 1.0 });
 	particles.push_back(p1);
 	particles.push_back(p2);
 
@@ -56,15 +56,35 @@ void SpringParticleSystem::generateBungeeSpring()
 
 void SpringParticleSystem::generateBuoyantParticle()
 {
-	Particle* liquid = new Particle({ 0.0, 50.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1e6, 0.99, { 0.0, 0.0, 1.0, 1.0 }, 1e6, new physx::PxBoxGeometry(10.0, 1, 10.0));
-	Particle* p = new Particle({ 0.0, 52.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.8, { 1.0, 0.0, 0.0, 1.0 }, 1e6);
+	if (water == nullptr)
+	{
+		water = new Particle({ 0.0, 50.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1e6, 0.99, { 0.0, 0.0, 1.0, 1.0 }, 1e6, new physx::PxBoxGeometry(10.0, 1, 10.0));
+		particles.push_back(water);
+	}
 
-	particles.push_back(liquid);
+	Particle* p = new Particle({ 0.0, 52.0, 0.0 }, { 0.0, 0.0, 0.0 }, 10.0, 0.8, { 1.0, 0.0, 0.0, 1.0 }, 1e6);
+
 	particles.push_back(p);
 
-	BuoyancyForceGenerator* f = new BuoyancyForceGenerator(1, 20.0, 1000.0, -gravity.y, liquid);
+	BuoyancyForceGenerator* f = new BuoyancyForceGenerator(1, 2.0, 1000.0, -gravity.y, water);
 	forceGenerators.push_back(f);
 
 	forceRegistry->addRegistry(f, p);
 	forceRegistry->addRegistry(gravGenerator, p);
+}
+
+void SpringParticleSystem::clearSystem()
+{
+	forceRegistry->clear();
+
+	for (Particle* p : particles) delete p;
+	particles.clear();
+
+	for (ParticleGenerator* g : particleGenerators) delete g;
+	particleGenerators.clear();
+
+	forceGenerators.clear();
+	forceRegistry->clear();
+
+	water = nullptr;
 }

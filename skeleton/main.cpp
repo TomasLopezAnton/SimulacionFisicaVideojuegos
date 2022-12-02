@@ -92,7 +92,7 @@ void initPhysics(bool interactive)
 	#pragma endregion
 
 	springs = new SpringParticleSystem();
-	springs->setGravity({ 0.0, -1.0, 0.0 });
+	springs->setGravity({ 0.0, -5.0, 0.0 });
 	particleSystems.push_back(springs);
 
 	#pragma region Inicializacion Humo
@@ -113,6 +113,9 @@ void initPhysics(bool interactive)
 	#pragma endregion
 
 	gScene = gPhysics->createScene(sceneDesc);
+
+	Particle* cube = new Particle({ 0.0, 50.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1e6, 0.99, { 0.0, 0.0, 1.0, 1.0 }, 1e6, new physx::PxBoxGeometry(1.0, 1.0, 1.0));
+	Particle* sphere = new Particle({ 0.0, 50.0, 5.0 }, { 0.0, 0.0, 0.0 }, 1e6, 0.99, { 0.0, 0.0, 1.0, 1.0 }, 1e6, new physx::PxSphereGeometry(1.0));
 }
 
 	
@@ -202,6 +205,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		break;
 	case'F':
 		springs->generateBuoyantParticle();
+		break;	
+	case'C':
+		springs->clearSystem();
 		break;
 	case ' ':
 	{
