@@ -11,10 +11,7 @@ void BuoyancyForceGenerator::updateForce(Particle* p, double t)
 	else if (h0 - h > height * 0.5) inmersed = 1.0;
 	else inmersed = (h0 - h) / height + 0.5;
 
-	Vector3 force = { 0.0, (float)density * (float)volume * (float)inmersed * (float)gravity, 0.0 };
-
-	//if (force.y > 0) std::cout << "Force: " << force.y << "\n";
-	if (force.y > 0) std::cout << "Inmersed: " << inmersed << "\n";
+	Vector3 force = { 0.0, (float)density * (float)p->getVolume() * (float)inmersed * -particleSystem->getGravity().y, 0.0};
 
 	p->addForce(force);
 }

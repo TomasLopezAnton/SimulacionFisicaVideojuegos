@@ -8,15 +8,15 @@
 class Particle
 {
 public:
-	Particle(Vector3 Pos, Vector3 Vel, double Mass, double Damp, Vector3 Acc, double time = 1000, Vector4 col = {0.2, 0.4, 1.0, 1.0}, float Size = 1.0);
-	Particle(Vector3 Pos, Vector3 Vel, double Mass, double Damp, Vector4 col = {1.0, 1.0, 1.0, 1.0}, double time = 1000, physx::PxGeometry* shape = new physx::PxSphereGeometry(1.0));
+	Particle(Vector3 Pos, Vector3 Vel, double Mass, double Damp, Vector3 Acc, double time = 1000, Vector4 col = {0.2, 0.4, 1.0, 1.0}, Vector3 Size = {1.0, 1.0, 1.0});
+	Particle(Vector3 Pos, Vector3 Vel, double Mass, double Damp, Vector4 col = {1.0, 1.0, 1.0, 1.0}, double time = 1000, physx::PxGeometry* shape = new physx::PxSphereGeometry(1.0), Vector3 Size = {1.0, 1.0, 1.0});
 	~Particle();
 
 	virtual void integrate(double t);
 
 	virtual Particle* clone() const { Particle* r = new Particle(*this); r->loadRenderItem(); return r;};
 
-	virtual void loadRenderItem() { renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(size)), &pose, col); };
+	virtual void loadRenderItem() { renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(size.x)), &pose, col); };
 
 	virtual std::list<Particle*> onDeath() { return std::list<Particle*>(); };
 
@@ -32,7 +32,7 @@ public:
 
 	void setTime(int t) { remainingTime = t; };
 
-	//void setColor(Vector4 c) { col = c; renderItem->color. };
+	void setSize(Vector3 s) { size = s; };
 
 	Vector3 getVelocity() { return vel; };
 
@@ -44,6 +44,10 @@ public:
 
 	double getTime() { return remainingTime; };
 
+	double getVolume() { return volume; };
+
+	Vector3 getSize() { return size; };
+
 	virtual int getType() { return -1; };
 
 protected:
@@ -51,10 +55,10 @@ protected:
 	Vector3 acc = {0.0, 0.0, 0.0};
 	Vector3 force = {0.0, 0.0, 0.0};
 	Vector4 col;
+	Vector3 size;
 	double mass;
 	double inverseMass;
 	double damp;
-	double size;
 	double volume;
 	double remainingTime;
 	physx::PxTransform pose; // Pasar la direccion de la pose a RenderItem para que se actualice automaticamente 

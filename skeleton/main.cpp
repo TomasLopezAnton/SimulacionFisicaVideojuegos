@@ -47,7 +47,6 @@ RenderItem* f;
 // Creamos los sistemas de particulas
 std::vector<ParticleSystem*> particleSystems;
 ParticleSystem* bullets;
-ContinuousParticleSystem* smoke;
 SpringParticleSystem* springs;
 FireworkSystem* fireworks;
 
@@ -85,25 +84,10 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 
-	#pragma region Inicializacion Suelo
-	// Inicializamos y registramos el suelo
-	f = new RenderItem(CreateShape(physx::PxBoxGeometry(250.0, 1.0, 250.0)), &floorPose, { 0.8, 0.8, 0.0, 1.0 });
-	RegisterRenderItem(f);
-	#pragma endregion
-
+	#pragma region Inicializacion Sistema Muelles
 	springs = new SpringParticleSystem();
-	springs->setGravity({ 0.0, -5.0, 0.0 });
+	springs->setGravity({ 0.0, -0.0, 0.0 });
 	particleSystems.push_back(springs);
-
-	#pragma region Inicializacion Humo
-	// Inicializamos el humo
-	smoke = new ContinuousParticleSystem();
-	smoke->setGravity({ 0.0, -1.0, 0.0 });
-
-	Particle* p = new Particle({ 0.0, -100000.0, 0.0 }, { 0.0, 0.0, 0.0 }, 0.2, 0.95, { 0.0, 0.0, 0.0 }, 8.0, { 0.1, 0.1, 0.1, 1.0 }, 1.0);
-
-	smoke->addGenerator(new UniformParticleGenerator((std::string)"FontGenerator", p, { 0.0, 25.0, 0.0 }, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, 0.0 }, { 240.0, 23.0, 240.0 }, 10));
-	particleSystems.push_back(smoke);
 	#pragma endregion
 
 	#pragma region Inicializacion Fuerzas
@@ -114,8 +98,6 @@ void initPhysics(bool interactive)
 
 	gScene = gPhysics->createScene(sceneDesc);
 
-	Particle* cube = new Particle({ 0.0, 50.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1e6, 0.99, { 0.0, 0.0, 1.0, 1.0 }, 1e6, new physx::PxBoxGeometry(1.0, 1.0, 1.0));
-	Particle* sphere = new Particle({ 0.0, 50.0, 5.0 }, { 0.0, 0.0, 0.0 }, 1e6, 0.99, { 0.0, 0.0, 1.0, 1.0 }, 1e6, new physx::PxSphereGeometry(1.0));
 }
 
 	
@@ -142,10 +124,6 @@ void cleanupPhysics(bool interactive)
 	for (ParticleSystem* system : particleSystems) delete system;
 	particleSystems.clear();
 
-	DeregisterRenderItem(f);
-	delete f;
-
-
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
 	gScene->release();
 	gDispatcher->release();
@@ -165,9 +143,6 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	case 'H': // Hace toggle a las particulas de humo/polvo que manipularemos con las fuerzas
-		smoke->generateContinously(!smoke->getGenerating());
-		break;
 	case 'V': // Activa una rafaga de viento entre las dos alturas especificadas
 		for (ParticleSystem* p : particleSystems)
 		{
@@ -192,8 +167,14 @@ void keyPress(unsigned char key, const PxTransform& camera)
 				p->addForceGenerator(explosion);
 			}
 		}
-
 		break;
+	case 'G': // Toggle Gravity
+	{
+		Vector3 grav = springs->getGravity();
+		if (grav.y == 0.0) springs->setGravity({ grav.x, -10, grav.z });
+		else springs->setGravity({ grav.x, 0.0, grav.z });
+		break;
+	}
 	case 'M':
 		springs->generateDualSpring();
 		break;
