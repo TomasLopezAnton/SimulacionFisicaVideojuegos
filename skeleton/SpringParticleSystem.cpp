@@ -36,6 +36,41 @@ void SpringParticleSystem::generateDualSpring()
 	forceRegistry->addRegistry(gravGenerator, p2);
 }
 
+void SpringParticleSystem::generateSlinky()
+{
+	Particle* p1 = new Particle({ 0.0, 60.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.6, { 1.0, 0.0, 0.0, 1.0 });
+	Particle* p2 = new Particle({ 0.0, 55.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.6, { 1.0, 0.5, 0.0, 1.0 });
+	Particle* p3 = new Particle({ 0.0, 50.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.6, { 1.0, 1.0, 0.0, 1.0 });
+	Particle* p4 = new Particle({ 0.0, 45.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.6, { 0.0, 1.0, 0.0, 1.0 });
+	Particle* p5 = new Particle({ 0.0, 43.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.6, { 0.0, 0.0, 1.0, 1.0 });
+
+	particles.push_back(p1);
+	particles.push_back(p2);
+	particles.push_back(p3);
+	particles.push_back(p4);
+	particles.push_back(p5);
+
+	SpringForceGenerator* f1 = new SpringForceGenerator(0.5, 5, p2);
+	SpringForceGenerator* f2 = new SpringForceGenerator(0.5, 5, p3);
+	SpringForceGenerator* f3 = new SpringForceGenerator(0.5, 5, p4);
+	SpringForceGenerator* f4 = new SpringForceGenerator(0.5, 5, p5);
+
+	forceGenerators.push_back(f1);
+	forceGenerators.push_back(f2);
+	forceGenerators.push_back(f3);
+	forceGenerators.push_back(f4);
+
+	forceRegistry->addRegistry(f1, p1);
+	forceRegistry->addRegistry(f2, p2);
+	forceRegistry->addRegistry(f3, p3);
+	forceRegistry->addRegistry(f4, p4);
+	forceRegistry->addRegistry(gravGenerator, p1);
+	forceRegistry->addRegistry(gravGenerator, p2);
+	forceRegistry->addRegistry(gravGenerator, p3);
+	forceRegistry->addRegistry(gravGenerator, p4);
+	forceRegistry->addRegistry(gravGenerator, p5);
+}
+
 void SpringParticleSystem::generateBungeeSpring()
 {
 	Particle* p1 = new Particle({ -15.0, 30.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.4, { 1.0, 0.0, 0.0, 1.0 });

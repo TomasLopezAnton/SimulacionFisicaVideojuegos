@@ -1,4 +1,5 @@
 #include "SpringForceGenerator.h"
+#include <iostream>
 
 void SpringForceGenerator::updateForce(Particle* p, double t)
 {
@@ -6,7 +7,9 @@ void SpringForceGenerator::updateForce(Particle* p, double t)
 
 	const float length = force.normalize();
 	const float deltaX = length - restingLength;
+
 	force *= deltaX * k;
+
 
 	p->addForce(force);
 }

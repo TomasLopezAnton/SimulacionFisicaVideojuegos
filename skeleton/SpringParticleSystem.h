@@ -15,6 +15,7 @@ public:
 	void generateAnchoredSpring();
 	void generateDualSpring();
 	void generateBungeeSpring();
+	void generateSlinky();
 	void generateBuoyantParticle();
 	void clearSystem();
 
