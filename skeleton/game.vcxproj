@@ -259,7 +259,7 @@
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="Cannonball.cpp" />
     <ClCompile Include="CircleGenerator.cpp" />
-    <ClCompile Include="ConstraintsSpringFG.cpp" />
+    <ClCompile Include="ConstraintsSpring.cpp" />
     <ClCompile Include="ContinuousParticleSystem.cpp" />
     <ClCompile Include="ExplosionForceGenerator.cpp" />
     <ClCompile Include="Fireball.cpp" />

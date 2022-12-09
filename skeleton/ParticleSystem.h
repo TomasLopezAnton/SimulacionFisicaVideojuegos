@@ -36,7 +36,7 @@ protected:
 	ParticleForceRegistry* forceRegistry;
 	GravityForceGenerator* gravGenerator;
 	Vector3 gravity = {0.0, -10.0, 0.0};
-	Vector3 bounds = { 0.0, -20, 0.0 };
+	Vector3 bounds = { 0.0, -200, 0.0 };
 private:
 
 };

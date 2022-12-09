@@ -91,7 +91,7 @@ void initPhysics(bool interactive)
 	#pragma endregion
 
 	#pragma region Inicializacion Fuerzas
-	windGenerator = new WindForceGenerator({ -40.0, 0.0, -40.0 }, 0.1, 0.001, { 0.0, 0.0, 0.0 }, 2.0, 100.0);
+	windGenerator = new WindForceGenerator({ -100.0, 0.0, -100.0 }, 0.1, 0.001, { 0.0, 0.0, 0.0 }, 2.0, 100.0);
 	vortex = new VortexGenerator(0.2, { -0.0, 0.0,  -0.0 }, 100);
 	explosion = new ExplosionForceGenerator(200, 2, Vector3(20.0, 5.0, 20.0), 0.1, 240.0);
 	#pragma endregion
@@ -185,11 +185,14 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		springs->generateBungeeSpring();
 		break;
 	case 'L':
-		springs->generateSlinky();
+		springs->generateConstraintsSlinky();
 		break;
 	case'F':
 		springs->generateBuoyantParticle();
 		break;	
+	case'Z':
+		springs->generateConstraintsSpring();
+		break;
 	case'C':
 		springs->clearSystem();
 		break;

@@ -1,7 +1,11 @@
 #include "SpringParticleSystem.h"
+#include <iostream>
+#include "Colors.h"
 
 void SpringParticleSystem::update(double t)
 {
+	for (ConstraintsSpring* c : constraints) c->update(t);
+
 	ParticleSystem::update(t);
 }
 
@@ -32,6 +36,19 @@ void SpringParticleSystem::generateDualSpring()
 
 	forceRegistry->addRegistry(f1, p1);
 	forceRegistry->addRegistry(f2, p2);
+	forceRegistry->addRegistry(gravGenerator, p1);
+	forceRegistry->addRegistry(gravGenerator, p2);
+}
+
+void SpringParticleSystem::generateConstraintsSpring()
+{
+	Particle* p1 = new Particle({ -10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.85, { 1.0, 0.0, 0.0, 1.0 });
+	Particle* p2 = new Particle({ 10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.85, { 0.0, 0.0, 1.0, 1.0 });
+	particles.push_back(p1);
+	particles.push_back(p2);
+
+	constraints.push_back(new ConstraintsSpring(1, 10, 25, 10, p1, p2));
+
 	forceRegistry->addRegistry(gravGenerator, p1);
 	forceRegistry->addRegistry(gravGenerator, p2);
 }
@@ -69,6 +86,27 @@ void SpringParticleSystem::generateSlinky()
 	forceRegistry->addRegistry(gravGenerator, p3);
 	forceRegistry->addRegistry(gravGenerator, p4);
 	forceRegistry->addRegistry(gravGenerator, p5);
+}
+
+void SpringParticleSystem::generateConstraintsSlinky()
+{
+	Particle* p1 = new Particle({ 0.0, 100.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.6, { 1.0, 0.0, 0.0, 1.0 });
+	particles.push_back(p1);
+	p1->setVelocity({ 0.0, 200, 100.0 });
+	forceRegistry->addRegistry(gravGenerator, p1);
+
+	Particle* previousP = p1;
+
+	for(int i = 1; i <= 20; i++)
+	{
+		Colors col = Colors();
+		
+		Particle* p = new Particle({ 0.0, (float)(100.0 - 20 * i), 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.6, col.rainbow[i % col.rainbow.size()]);
+		particles.push_back(p);
+		constraints.push_back(new ConstraintsSpring(5, 10, 300, 2, p, previousP));
+		forceRegistry->addRegistry(gravGenerator, p);
+		previousP = p;
+	}
 }
 
 void SpringParticleSystem::generateBungeeSpring()
@@ -117,6 +155,10 @@ void SpringParticleSystem::clearSystem()
 
 	for (ParticleGenerator* g : particleGenerators) delete g;
 	particleGenerators.clear();
+
+	for (ConstraintsSpring* c : constraints) delete c;
+	constraints.clear();
+
 
 	forceGenerators.clear();
 	forceRegistry->clear();

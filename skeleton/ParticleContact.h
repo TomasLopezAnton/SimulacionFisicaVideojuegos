@@ -8,6 +8,9 @@ public:
 	void resolve(float t);
 
 	void setPenetration(float p) { penetration = p; };
+
+	void setNormal(Vector3 n) { contactNormal = n; };
+
 protected:
 private:
 	Particle* particle[2];

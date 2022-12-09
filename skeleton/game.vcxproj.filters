@@ -79,7 +79,7 @@
     <ClCompile Include="BuoyancyForceGenerator.cpp">
       <Filter>ForceGenerators\Springs</Filter>
     </ClCompile>
-    <ClCompile Include="ConstraintsSpringFG.cpp">
+    <ClCompile Include="ConstraintsSpring.cpp">
       <Filter>Constraints</Filter>
     </ClCompile>
     <ClCompile Include="ParticleContact.cpp">
