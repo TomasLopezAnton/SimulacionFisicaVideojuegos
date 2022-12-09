@@ -259,6 +259,7 @@
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="Cannonball.cpp" />
     <ClCompile Include="CircleGenerator.cpp" />
+    <ClCompile Include="ConstraintsSpringFG.cpp" />
     <ClCompile Include="ContinuousParticleSystem.cpp" />
     <ClCompile Include="ExplosionForceGenerator.cpp" />
     <ClCompile Include="Fireball.cpp" />
@@ -270,6 +271,7 @@
     <ClCompile Include="Laser.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleContact.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
@@ -291,6 +293,7 @@
     <ClInclude Include="checkML.h" />
     <ClInclude Include="CircleGenerator.h" />
     <ClInclude Include="Colors.h" />
+    <ClInclude Include="ConstraintsSpring.h" />
     <ClInclude Include="ContinuousParticleSystem.h" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="ExplosionForceGenerator.h" />
@@ -304,6 +307,7 @@
     <ClInclude Include="GravityForceGenerator.h" />
     <ClInclude Include="Laser.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleContact.h" />
     <ClInclude Include="ParticleForceRegistry.h" />
     <ClInclude Include="ParticleGenerator.h" />
     <ClInclude Include="ParticleSystem.h" />

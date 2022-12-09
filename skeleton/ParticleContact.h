@@ -4,13 +4,17 @@
 class ParticleContact
 {
 public:
+	ParticleContact(Particle* p1, Particle* p2) { particle[0] = p1; particle[1] = p2; }
+	void resolve(float t);
+
+	void setPenetration(float p) { penetration = p; };
+protected:
+private:
 	Particle* particle[2];
-	float restitution;
+	float restitution = 1.0;
 	float penetration;
 	Vector3 contactNormal;
-protected:
-	void resolve(float t);
-private:
+
 	void resolveVelocity(float t);
 	void resolveInterPenetration(float t);
 };

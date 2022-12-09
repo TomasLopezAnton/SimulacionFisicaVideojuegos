@@ -26,13 +26,15 @@ public:
 
 	void setAcceleration(Vector3 a) { acc = a; };
 
-
 	void setVelocity(Vector3 v) { vel = v; };
+
 	void setPosition(Vector3 p) { pose = physx::PxTransform(p.x, p.y, p.z); };
 
 	void setTime(int t) { remainingTime = t; };
 
 	void setSize(Vector3 s) { size = s; };
+
+	physx::PxTransform getTransform() { return pose; };
 
 	Vector3 getVelocity() { return vel; };
 

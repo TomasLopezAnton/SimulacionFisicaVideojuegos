@@ -10,6 +10,5 @@ void SpringForceGenerator::updateForce(Particle* p, double t)
 
 	force *= deltaX * k;
 
-
 	p->addForce(force);
 }

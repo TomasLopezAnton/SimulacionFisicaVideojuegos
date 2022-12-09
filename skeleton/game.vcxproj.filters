@@ -79,6 +79,12 @@
     <ClCompile Include="BuoyancyForceGenerator.cpp">
       <Filter>ForceGenerators\Springs</Filter>
     </ClCompile>
+    <ClCompile Include="ConstraintsSpringFG.cpp">
+      <Filter>Constraints</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleContact.cpp">
+      <Filter>Constraints</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -174,6 +180,12 @@
     <ClInclude Include="BuoyancyForceGenerator.h">
       <Filter>ForceGenerators\Springs</Filter>
     </ClInclude>
+    <ClInclude Include="ConstraintsSpring.h">
+      <Filter>Constraints</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleContact.h">
+      <Filter>Constraints</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
@@ -193,6 +205,9 @@
     </Filter>
     <Filter Include="ForceGenerators\Springs">
       <UniqueIdentifier>{c9e7ab9d-1388-4617-81e2-842f50c131ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Constraints">
+      <UniqueIdentifier>{e7c782da-1afb-4044-857b-4ab43b0931e2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

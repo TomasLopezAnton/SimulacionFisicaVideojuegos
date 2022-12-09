@@ -1,6 +1,14 @@
-#include "ConstraintsSpringFG.h"
+#include "ConstraintsSpring.h"
 
-void ConstraintsSpringFG::updateForce(Particle* p, double t)
+void ConstraintsSpring::update(double t)
 {
-	SpringForceGenerator::updateForce(p, t);
+	currentLength = sFG1->getLength(particle1);
+
+	if(currentLength < maxLength)
+	{
+
+
+		sFG1->updateForce(particle1, t);
+		sFG2->updateForce(particle2, t);
+	}
 }

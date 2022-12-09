@@ -15,6 +15,8 @@ public:
 
 	Particle* getOther() { return other; };
 
+	double getLength(Particle* p) { other->getPosition() - p->getPosition(); };
+
 protected:
 	double k;
 	double restingLength;
