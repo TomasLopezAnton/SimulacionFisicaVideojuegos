@@ -14,7 +14,8 @@ void ParticleContact::resolveVelocity(float t)
 	float inverseMass1 = particle[0]->getInvMass();
 	float inverseMass2 = particle[1]->getInvMass();
 
-	Vector3 impulse1 = -((initialVelocity1 - initialVelocity2) * (restitution + 1)) / (inverseMass1 + inverseMass2);
+	Vector3 impulse1 = (-((initialVelocity1 - initialVelocity2) * (restitution + 1)) / (inverseMass1 + inverseMass2));
+	//impulse1 = { impulse1.x * contactNormal.x, impulse1.y * contactNormal.y, impulse1.z * contactNormal.z };
 	Vector3 impulse2 = -impulse1;
 
 	particle[0]->setVelocity(initialVelocity1 + inverseMass1 * impulse1);

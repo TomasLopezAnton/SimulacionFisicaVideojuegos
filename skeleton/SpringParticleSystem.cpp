@@ -1,9 +1,23 @@
 #include "SpringParticleSystem.h"
-#include <iostream>
-#include "Colors.h"
+
 
 void SpringParticleSystem::update(double t)
 {
+	for (ParticleContact* c : contacts)  
+	{
+		Particle* p = c->getParticle(1);
+		float pen = (floor->getSize().y + p->getSize().x - abs(floor->getPosition().y - p->getPosition().y));
+
+
+		if (pen > 0.0)
+		{
+			c->setPenetration(pen);
+			c->setNormal({0.0, 1.0, 0.0});
+			c->setRestitution(1.0);
+			c->resolve(t);
+		}
+	}
+
 	for (ConstraintsSpring* c : constraints) c->update(t);
 
 	ParticleSystem::update(t);
@@ -90,22 +104,24 @@ void SpringParticleSystem::generateSlinky()
 
 void SpringParticleSystem::generateConstraintsSlinky()
 {
-	Particle* p1 = new Particle({ 0.0, 100.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.6, { 1.0, 0.0, 0.0, 1.0 });
+	Particle* p1 = new Particle({ 50.0, 240.0, 50.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.6, { 1.0, 0.0, 0.0, 1.0 });
 	particles.push_back(p1);
-	p1->setVelocity({ 0.0, 200, 100.0 });
 	forceRegistry->addRegistry(gravGenerator, p1);
-
+	ParticleContact* c = new ParticleContact(floor, p1);
+	contacts.push_back(c);
 	Particle* previousP = p1;
 
-	for(int i = 1; i <= 20; i++)
+	for(int i = 1; i <= 11; i++)
 	{
 		Colors col = Colors();
 		
-		Particle* p = new Particle({ 0.0, (float)(100.0 - 20 * i), 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.6, col.rainbow[i % col.rainbow.size()]);
+		Particle* p = new Particle({ 0.0, (float)(240.0 - 20 * i), 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.6, col.rainbow[i % col.rainbow.size()]);
 		particles.push_back(p);
-		constraints.push_back(new ConstraintsSpring(5, 10, 300, 2, p, previousP));
+		constraints.push_back(new ConstraintsSpring(1, 5, 3000, 2, p, previousP));
 		forceRegistry->addRegistry(gravGenerator, p);
 		previousP = p;
+		ParticleContact* c = new ParticleContact(floor, p);
+		contacts.push_back(c);
 	}
 }
 

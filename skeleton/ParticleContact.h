@@ -11,6 +11,10 @@ public:
 
 	void setNormal(Vector3 n) { contactNormal = n; };
 
+	void setRestitution(float r) { restitution = r; };
+
+	Particle* getParticle(int index) { return particle[index]; };
+
 protected:
 private:
 	Particle* particle[2];
