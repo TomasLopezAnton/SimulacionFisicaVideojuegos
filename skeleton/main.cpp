@@ -9,10 +9,14 @@
 #include "core.hpp"
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
+
 #include "Particle.h"
 #include "Rocket.h"
 #include "GaussianParticleGenerator.h"
 #include "UniformParticleGenerator.h"
+
+#include "StaticRigidbody.h"
+#include "DinamicRigidbody.h"
 
 #include "ParticleSystem.h"
 #include "FireworkSystem.h"
@@ -41,8 +45,8 @@ PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
 // Creamos el suelo
-physx::PxTransform floorPose = physx::PxTransform({ 0.0, 0.0, 0.0 });
-RenderItem* f;
+//physx::PxTransform floorPose = physx::PxTransform({ 0.0, 0.0, 0.0 });
+//RenderItem* f;
 
 // Creamos los sistemas de particulas
 std::vector<ParticleSystem*> particleSystems;
@@ -57,6 +61,8 @@ ExplosionForceGenerator* explosion;
 
 // Aceleracion de los cohetes
 double rocketJet = 10;
+
+Rigidbody* suelo;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -84,17 +90,8 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 
-	#pragma region Inicializacion Sistema Muelles
-	springs = new SpringParticleSystem();
-	springs->setGravity({ 0.0, -0.0, 0.0 });
-	particleSystems.push_back(springs);
-	#pragma endregion
-
-	#pragma region Inicializacion Fuerzas
-	windGenerator = new WindForceGenerator({ -40.0, 0.0, -40.0 }, 0.1, 0.001, { 0.0, 0.0, 0.0 }, 2.0, 100.0);
-	vortex = new VortexGenerator(0.2, { -0.0, 0.0,  -0.0 }, 100);
-	explosion = new ExplosionForceGenerator(200, 2, Vector3(20.0, 5.0, 20.0), 0.1, 240.0);
-	#pragma endregion
+	physx::PxTransform floorPose = physx::PxTransform({ 0.0, 0.0, 0.0 });
+	suelo = new StaticRigidbody(gPhysics, gScene, floorPose, gMaterial, PxBoxGeometry(100.0, 10.0, 100.0), { 0.5, 1.0, 0.2, 1.0 });
 
 	gScene = gPhysics->createScene(sceneDesc);
 
@@ -143,53 +140,6 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	case 'V': // Activa una rafaga de viento entre las dos alturas especificadas
-		for (ParticleSystem* p : particleSystems)
-		{
-			if (p->containsForceGenerator(windGenerator)) p->removeForceGenerator(windGenerator);
-			else p->addForceGenerator(windGenerator);
-		}
-		break;
-	case 'T': // Activa el remolino
-		for(ParticleSystem* p : particleSystems)
-		{
-			if (p->containsForceGenerator(vortex)) p->removeForceGenerator(vortex);
-			else p->addForceGenerator(vortex);
-		}
-		break;
-	case 'E': // Activa una explosion que crece con el tiempo
-		for (ParticleSystem* p : particleSystems)
-		{
-			if (p->containsForceGenerator(explosion)) p->removeForceGenerator(explosion);
-			else
-			{
-				explosion->setRadius(0.0);
-				p->addForceGenerator(explosion);
-			}
-		}
-		break;
-	case 'G': // Toggle Gravity
-	{
-		Vector3 grav = springs->getGravity();
-		if (grav.y == 0.0) springs->setGravity({ grav.x, -10, grav.z });
-		else springs->setGravity({ grav.x, 0.0, grav.z });
-		break;
-	}
-	case 'M':
-		springs->generateDualSpring();
-		break;
-	case 'N':
-		springs->generateAnchoredSpring();
-		break;	
-	case 'B':
-		springs->generateBungeeSpring();
-		break;
-	case'F':
-		springs->generateBuoyantParticle();
-		break;	
-	case'C':
-		springs->clearSystem();
-		break;
 	case ' ':
 	{
 		break;

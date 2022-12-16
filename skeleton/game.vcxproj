@@ -293,6 +293,7 @@
     <ClInclude Include="Colors.h" />
     <ClInclude Include="ContinuousParticleSystem.h" />
     <ClInclude Include="core.hpp" />
+    <ClInclude Include="DinamicRigidbody.h" />
     <ClInclude Include="ExplosionForceGenerator.h" />
     <ClInclude Include="Fireball.h" />
     <ClInclude Include="Firework.h" />
@@ -310,10 +311,12 @@
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
+    <ClInclude Include="Rigidbody.h" />
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="RocketSystem.h" />
     <ClInclude Include="SpringForceGenerator.h" />
     <ClInclude Include="SpringParticleSystem.h" />
+    <ClInclude Include="StaticRigidbody.h" />
     <ClInclude Include="TimedParticleSystem.h" />
     <ClInclude Include="UniformParticleGenerator.h" />
     <ClInclude Include="VortexGenerator.h" />

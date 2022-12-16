@@ -174,6 +174,15 @@
     <ClInclude Include="BuoyancyForceGenerator.h">
       <Filter>ForceGenerators\Springs</Filter>
     </ClInclude>
+    <ClInclude Include="Rigidbody.h">
+      <Filter>RigidBodies</Filter>
+    </ClInclude>
+    <ClInclude Include="DinamicRigidbody.h">
+      <Filter>RigidBodies</Filter>
+    </ClInclude>
+    <ClInclude Include="StaticRigidbody.h">
+      <Filter>RigidBodies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
@@ -193,6 +202,9 @@
     </Filter>
     <Filter Include="ForceGenerators\Springs">
       <UniqueIdentifier>{c9e7ab9d-1388-4617-81e2-842f50c131ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RigidBodies">
+      <UniqueIdentifier>{43f127a9-5168-45f0-8830-f7e54dbd258d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
