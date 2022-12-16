@@ -9,13 +9,6 @@ public:
 		: Rigidbody(physics, s, c)
 	{
 		rigidbody = gPhysics->createRigidStatic(transform); 
-
-		shape = rigidbody->createShape(geometry, *material);
-		rigidbody->attachShape(*shape);
-
-		scene->addActor(*rigidbody);
-
-		renderItem = new RenderItem(shape, rigidbody, col);
 	};
 
 	physx::PxRigidStatic* getRigidbody() { return rigidbody; };

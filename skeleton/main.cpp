@@ -62,7 +62,8 @@ ExplosionForceGenerator* explosion;
 // Aceleracion de los cohetes
 double rocketJet = 10;
 
-Rigidbody* suelo;
+StaticRigidbody* suelo;
+DinamicRigidbody* objeto;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -90,10 +91,25 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 
+	gScene = gPhysics->createScene(sceneDesc);
+
 	physx::PxTransform floorPose = physx::PxTransform({ 0.0, 0.0, 0.0 });
 	suelo = new StaticRigidbody(gPhysics, gScene, floorPose, gMaterial, PxBoxGeometry(100.0, 10.0, 100.0), { 0.5, 1.0, 0.2, 1.0 });
 
-	gScene = gPhysics->createScene(sceneDesc);
+	PxShape* s = gPhysics->createShape(PxBoxGeometry(100.0, 10.0, 100.0), *gMaterial);
+	suelo->getRigidbody()->attachShape(*s);
+	gScene->addActor(*suelo->getRigidbody());
+
+	RenderItem* renderItem = new RenderItem(s, suelo->getRigidbody(), { 0.5, 1.0, 0.2, 1.0 });
+
+	physx::PxTransform objetoPose = physx::PxTransform({ 0.0, 1000.0, 0.0 });
+	objeto = new DinamicRigidbody(gPhysics, gScene, objetoPose, gMaterial, PxBoxGeometry(10.0, 10.0, 10.0), { 0.5, 1.0, 0.2, 1.0 });
+
+	PxShape* os = gPhysics->createShape(PxBoxGeometry(10.0, 10.0, 10.0), *gMaterial);
+	objeto->getRigidbody()->attachShape(*os);
+	gScene->addActor(*objeto->getRigidbody());
+
+	RenderItem* objetoRenderItem = new RenderItem(os, objeto->getRigidbody(), { 1.0, 0.0, 0.0, 1.0 });
 
 }
 
