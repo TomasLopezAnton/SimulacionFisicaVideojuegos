@@ -94,7 +94,7 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	physx::PxTransform floorPose = physx::PxTransform({ 0.0, 0.0, 0.0 });
-	suelo = new StaticRigidbody(gPhysics, gScene, floorPose, gMaterial, PxBoxGeometry(100.0, 10.0, 100.0), { 0.5, 1.0, 0.2, 1.0 });
+	suelo = new StaticRigidbody(gPhysics, gScene, floorPose, gMaterial, PxBoxGeometry(1000.0, 10.0, 1000.0), { 0.5, 1.0, 0.2, 1.0 });
 
 	PxShape* s = gPhysics->createShape(PxBoxGeometry(100.0, 10.0, 100.0), *gMaterial);
 	suelo->getRigidbody()->attachShape(*s);
@@ -102,7 +102,7 @@ void initPhysics(bool interactive)
 
 	RenderItem* renderItem = new RenderItem(s, suelo->getRigidbody(), { 0.5, 1.0, 0.2, 1.0 });
 
-	physx::PxTransform objetoPose = physx::PxTransform({ 0.0, 1000.0, 0.0 });
+	physx::PxTransform objetoPose = physx::PxTransform({ 0.0, 100.0, 0.0 });
 	objeto = new DinamicRigidbody(gPhysics, gScene, objetoPose, gMaterial, PxBoxGeometry(10.0, 10.0, 10.0), { 0.5, 1.0, 0.2, 1.0 });
 
 	PxShape* os = gPhysics->createShape(PxBoxGeometry(10.0, 10.0, 10.0), *gMaterial);
