@@ -12,8 +12,11 @@
 
 #include "Particle.h"
 #include "Rocket.h"
+
 #include "GaussianParticleGenerator.h"
 #include "UniformParticleGenerator.h"
+
+#include "GaussianBodyGenerator.h"
 
 #include "StaticRigidbody.h"
 #include "DinamicRigidbody.h"
@@ -23,9 +26,13 @@
 #include "ContinuousParticleSystem.h"
 #include "SpringParticleSystem.h"
 
+#include "RigidbodySystem.h"
+
 #include "WindForceGenerator.h"
 #include "VortexGenerator.h"
 #include "ExplosionForceGenerator.h"
+
+#include "RBWindForceGenerator.h"
 
 using namespace physx;
 
@@ -50,6 +57,8 @@ ContactReportCallback gContactReportCallback;
 
 // Creamos los sistemas de particulas
 std::vector<ParticleSystem*> particleSystems;
+std::vector<RigidbodySystem*> RBSystems;
+
 ParticleSystem* bullets;
 SpringParticleSystem* springs;
 FireworkSystem* fireworks;
@@ -59,11 +68,15 @@ WindForceGenerator* windGenerator;
 VortexGenerator* vortex;
 ExplosionForceGenerator* explosion;
 
+
+RBWindForceGenerator* RBwindGenerator;
+
 // Aceleracion de los cohetes
 double rocketJet = 10;
 
 StaticRigidbody* suelo;
 DinamicRigidbody* objeto;
+GaussianBodyGenerator* generator;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -94,23 +107,21 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	physx::PxTransform floorPose = physx::PxTransform({ 0.0, 0.0, 0.0 });
-	suelo = new StaticRigidbody(gPhysics, gScene, floorPose, gMaterial, PxBoxGeometry(1000.0, 10.0, 1000.0), { 0.5, 1.0, 0.2, 1.0 });
+	suelo = new StaticRigidbody(gPhysics, gScene, floorPose, gMaterial, new PxBoxGeometry(1000.0, 10.0, 1000.0), { 0.5, 1.0, 0.2, 1.0 }, 1e6);
 
-	PxShape* s = gPhysics->createShape(PxBoxGeometry(100.0, 10.0, 100.0), *gMaterial);
-	suelo->getRigidbody()->attachShape(*s);
-	gScene->addActor(*suelo->getRigidbody());
+	physx::PxTransform objetoPose = physx::PxTransform({ 0.0, -1000.0, 0.0 });
+	objeto = new DinamicRigidbody(gPhysics, gScene, objetoPose, gMaterial, new PxBoxGeometry(1.0, 1.0, 1.0), { 1.0, 0.0, 0.0, 1.0 }, 10);
 
-	RenderItem* renderItem = new RenderItem(s, suelo->getRigidbody(), { 0.5, 1.0, 0.2, 1.0 });
+	RigidbodySystem* cubes = new RigidbodySystem();
 
-	physx::PxTransform objetoPose = physx::PxTransform({ 0.0, 100.0, 0.0 });
-	objeto = new DinamicRigidbody(gPhysics, gScene, objetoPose, gMaterial, PxBoxGeometry(10.0, 10.0, 10.0), { 0.5, 1.0, 0.2, 1.0 });
+	RBSystems.push_back(cubes);
 
-	PxShape* os = gPhysics->createShape(PxBoxGeometry(10.0, 10.0, 10.0), *gMaterial);
-	objeto->getRigidbody()->attachShape(*os);
-	gScene->addActor(*objeto->getRigidbody());
+	generator = new GaussianBodyGenerator("Gen", objeto, { 0.0, 150.0, 0.0 }, { 0.0, 0.0, 0.0 }, { 0.1, 0.1, 0.1 }, { 20, 0.1, 20 }, 1);
+	cubes->addGenerator(generator);
 
-	RenderItem* objetoRenderItem = new RenderItem(os, objeto->getRigidbody(), { 1.0, 0.0, 0.0, 1.0 });
+	RBwindGenerator = new RBWindForceGenerator({ -100.0, 0.0, -100.0 }, 0.1, 0.001, { 0.0, 40.0, 0.0 }, 0.0, 50.0);
 
+	cubes->addForceGenerator(RBwindGenerator);
 }
 
 	
@@ -123,6 +134,8 @@ void stepPhysics(bool interactive, double t)
 
 	// Iteramos a traves de los sistemas de particulas para actualizarlos
 	for (ParticleSystem* system : particleSystems) system->update(t);
+
+	for (RigidbodySystem* system : RBSystems) system->update(t);
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);

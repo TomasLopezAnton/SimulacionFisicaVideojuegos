@@ -79,6 +79,15 @@
     <ClCompile Include="BuoyancyForceGenerator.cpp">
       <Filter>ForceGenerators\Springs</Filter>
     </ClCompile>
+    <ClCompile Include="GaussianBodyGenerator.cpp">
+      <Filter>RigidBodies\Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="RBWindForceGenerator.cpp">
+      <Filter>RigidBodies\Forces</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidbodySystem.cpp">
+      <Filter>RigidBodies\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -183,6 +192,24 @@
     <ClInclude Include="StaticRigidbody.h">
       <Filter>RigidBodies</Filter>
     </ClInclude>
+    <ClInclude Include="RigidBodyGenerator.h">
+      <Filter>RigidBodies\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="GaussianBodyGenerator.h">
+      <Filter>RigidBodies\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="RBForceGenerator.h">
+      <Filter>RigidBodies\Forces</Filter>
+    </ClInclude>
+    <ClInclude Include="RBWindForceGenerator.h">
+      <Filter>RigidBodies\Forces</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidbodySystem.h">
+      <Filter>RigidBodies\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidbodyForceRegistry.h">
+      <Filter>RigidBodies\Forces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
@@ -205,6 +232,15 @@
     </Filter>
     <Filter Include="RigidBodies">
       <UniqueIdentifier>{43f127a9-5168-45f0-8830-f7e54dbd258d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RigidBodies\Generators">
+      <UniqueIdentifier>{5230de77-1f01-4e93-98ef-a3f083ae9469}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RigidBodies\Forces">
+      <UniqueIdentifier>{0b1662ab-f41d-4a98-b593-530102cfec67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RigidBodies\Systems">
+      <UniqueIdentifier>{254f1e2c-8b82-43b2-9920-ed868d0ac55a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
