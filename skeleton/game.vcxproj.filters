@@ -186,6 +186,9 @@
     <ClInclude Include="ParticleContact.h">
       <Filter>Constraints</Filter>
     </ClInclude>
+    <ClInclude Include="ConstraintsRope.h">
+      <Filter>Constraints</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

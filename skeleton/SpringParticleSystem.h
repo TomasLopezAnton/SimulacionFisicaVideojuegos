@@ -4,6 +4,7 @@
 #include "BungeeForceGenerator.h"
 #include "BuoyancyForceGenerator.h"
 #include "ConstraintsSpring.h"
+#include "ConstraintsRope.h"
 #include <iostream>
 #include "Colors.h"
 #include "ParticleContact.h"
@@ -23,12 +24,18 @@ public:
 	void generateSlinky();
 	void generateConstraintsSlinky();
 	void generateBuoyantParticle();
+	void generateRope();
 	void clearSystem();
+
+	void velRedParticle(Vector3 vel) { if (redParticle != nullptr) redParticle->setVelocity(redParticle->getVelocity() + vel); };
+	void stopRedParticle() { if (redParticle != nullptr) redParticle->setVelocity({0, 0, 0}); };
 
 protected:
 private:
 	Particle* water = nullptr;
 	Particle* floor = nullptr;
+	Particle* redParticle = nullptr;
 	std::list<ConstraintsSpring*> constraints;
+	std::list<ConstraintsRope*> constraintsr;
 	std::list<ParticleContact*> contacts;
 };

@@ -27,5 +27,3 @@ private:
 	SpringForceGenerator* sFG1;
 	SpringForceGenerator* sFG2;
 };
-
-//if (deltaX > 0) std::cout << deltaX << "\n";

@@ -20,7 +20,16 @@ void SpringParticleSystem::update(double t)
 
 	for (ConstraintsSpring* c : constraints) c->update(t);
 
+	for (ConstraintsRope* c : constraintsr) c->update(t);
+
 	ParticleSystem::update(t);
+
+	if(redParticle != nullptr)
+	{
+		Vector3 p = redParticle->getPosition();
+
+		redParticle->setPosition({ p.x, 10.0f, p.z });
+	}
 }
 
 void SpringParticleSystem::generateAnchoredSpring()
@@ -162,6 +171,43 @@ void SpringParticleSystem::generateBuoyantParticle()
 	forceRegistry->addRegistry(gravGenerator, p);
 }
 
+void SpringParticleSystem::generateRope()
+{
+	Colors col = Colors();
+
+	Particle* p1 = new Particle({ -10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.85, col.c[RED]);
+	Particle* p2 = new Particle({ 10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.85, col.c[BLUE]);
+	Particle* p3 = new Particle({ 10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.85, col.c[GREEN]);
+	Particle* p4 = new Particle({ 10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.85, col.c[YELLOW]);
+	Particle* p5 = new Particle({ 10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.85, col.c[ORANGE]);
+	Particle* p6 = new Particle({ 10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.85, col.c[PINK]);
+	Particle* p7 = new Particle({ 10.0, 10.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1.0, 0.85, col.c[PURPLE]);
+	particles.push_back(p1);
+	particles.push_back(p2);
+	particles.push_back(p3);
+	particles.push_back(p4);
+	particles.push_back(p5);
+	particles.push_back(p6);
+	particles.push_back(p7);
+
+	redParticle = p1;
+
+	constraintsr.push_back(new ConstraintsRope(0.2, 10, p1, p2));
+	constraintsr.push_back(new ConstraintsRope(0.2, 10, p2, p3));
+	constraintsr.push_back(new ConstraintsRope(0.2, 10, p3, p4));
+	constraintsr.push_back(new ConstraintsRope(0.2, 10, p4, p5));
+	constraintsr.push_back(new ConstraintsRope(0.2, 10, p5, p6));
+	constraintsr.push_back(new ConstraintsRope(0.2, 10, p6, p7));
+
+	//forceRegistry->addRegistry(gravGenerator, p1);
+	forceRegistry->addRegistry(gravGenerator, p2);
+	forceRegistry->addRegistry(gravGenerator, p3);
+	forceRegistry->addRegistry(gravGenerator, p4);
+	forceRegistry->addRegistry(gravGenerator, p5);
+	forceRegistry->addRegistry(gravGenerator, p6);
+	forceRegistry->addRegistry(gravGenerator, p7);
+}
+
 void SpringParticleSystem::clearSystem()
 {
 	forceRegistry->clear();
@@ -175,9 +221,13 @@ void SpringParticleSystem::clearSystem()
 	for (ConstraintsSpring* c : constraints) delete c;
 	constraints.clear();
 
+	for (ConstraintsRope* c : constraintsr) delete c;
+	constraintsr.clear();
+
 
 	forceGenerators.clear();
 	forceRegistry->clear();
 
 	water = nullptr;
+	redParticle = nullptr;
 }

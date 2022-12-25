@@ -293,6 +293,7 @@
     <ClInclude Include="checkML.h" />
     <ClInclude Include="CircleGenerator.h" />
     <ClInclude Include="Colors.h" />
+    <ClInclude Include="ConstraintsRope.h" />
     <ClInclude Include="ConstraintsSpring.h" />
     <ClInclude Include="ContinuousParticleSystem.h" />
     <ClInclude Include="core.hpp" />

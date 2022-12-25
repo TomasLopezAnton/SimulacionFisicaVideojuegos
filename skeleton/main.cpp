@@ -143,12 +143,12 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	case 'V': // Activa una rafaga de viento entre las dos alturas especificadas
-		for (ParticleSystem* p : particleSystems)
-		{
-			if (p->containsForceGenerator(windGenerator)) p->removeForceGenerator(windGenerator);
-			else p->addForceGenerator(windGenerator);
-		}
+	//case 'V': // Activa una rafaga de viento entre las dos alturas especificadas
+	//	for (ParticleSystem* p : particleSystems)
+	//	{
+	//		if (p->containsForceGenerator(windGenerator)) p->removeForceGenerator(windGenerator);
+	//		else p->addForceGenerator(windGenerator);
+	//	}
 		break;
 	case 'T': // Activa el remolino
 		for(ParticleSystem* p : particleSystems)
@@ -175,15 +175,15 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		else springs->setGravity({ grav.x, 0.0, grav.z });
 		break;
 	}
-	case 'M':
-		springs->generateDualSpring();
-		break;
-	case 'N':
-		springs->generateAnchoredSpring();
-		break;	
-	case 'B':
-		springs->generateBungeeSpring();
-		break;
+	//case 'M':
+	//	springs->generateDualSpring();
+	//	break;
+	//case 'N':
+	//	springs->generateAnchoredSpring();
+	//	break;	
+	//case 'B':
+	//	springs->generateBungeeSpring();
+	//	break;
 	case 'L':
 		springs->generateConstraintsSlinky();
 		break;
@@ -195,6 +195,21 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		break;
 	case'C':
 		springs->clearSystem();
+		break;
+	case'R':
+		springs->generateRope();
+		break;
+	case'V':
+		springs->velRedParticle({10, 0, 10});
+		break;
+	case'M':
+		springs->velRedParticle({ -10, 0, 0 });
+		break;
+	case'N':
+		springs->velRedParticle({ 10, 0, 0 });
+		break;
+	case'B':
+		springs->stopRedParticle();
 		break;
 	case ' ':
 	{
