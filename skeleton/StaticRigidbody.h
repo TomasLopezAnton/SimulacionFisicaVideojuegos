@@ -26,9 +26,13 @@ public:
 
 	void integrate(float t) { remainingTime -= t; };
 
+	virtual bool isDinamic() { return false; };
+
 	void setPosition(Vector3 p) { transform.p = p; rigidbody->setGlobalPose(transform); }
 
 	physx::PxRigidStatic* getRigidbody() { return rigidbody; };
+
+	virtual physx::PxQuat getRotation() { return rigidbody->getGlobalPose().q; };
 
 	bool getStatic() { return true; };
 

@@ -22,11 +22,15 @@ public:
 
 	std::list<Rigidbody*> onDeath() { return std::list<Rigidbody*>(); };
 
+	virtual bool isDinamic() { return false; };
+
 	physx::PxShape* getShape() { return shape; };
 
 	virtual Vector3 getLinearVelocity() { return { 0, 0, 0 }; };
 
 	virtual Vector3 getPosition() { return transform.p; };
+
+	virtual physx::PxQuat getRotation() { return transform.q; };
 
 	Vector4 getColor() { return col; };
 
@@ -36,7 +40,13 @@ public:
 
 	float getTime() { return remainingTime; };
 
+	float getVolume() { return extractVolume(shape->getGeometry()); }
+
+	Vector3 getGravity() { return scene->getGravity(); }
+
 	virtual void addForce(Vector3 f) {};
+
+	virtual void addTorque(Vector3 t) {};
 
 	Vector4 setColor(Vector4 c) { col = c; renderItem->color = col; };
 
@@ -73,6 +83,33 @@ protected:
 			break;
 		default:
 			return new physx::PxBoxGeometry(holder.box());
+			break;
+		}
+	}
+
+	float extractVolume(physx::PxGeometryHolder holder)
+	{
+		float radius, height;
+		Vector3 size;
+
+		switch (holder.getType())
+		{
+		case physx::PxGeometryType::eSPHERE:
+			radius = physx::PxSphereGeometry(holder.sphere()).radius;
+			return (4 * 3.1415 * radius * radius * radius) / 3.0;
+			break;
+		case physx::PxGeometryType::eBOX:
+			size = physx::PxBoxGeometry(holder.box()).halfExtents;
+			return size.x * size.y * size.z;
+			break;
+		case physx::PxGeometryType::eCAPSULE:
+			radius = physx::PxCapsuleGeometry(holder.capsule()).radius;
+			height = physx::PxCapsuleGeometry(holder.capsule()).halfHeight * 2;
+			return (3.1415 * radius * radius) * (4.0 / 3.0 * radius + height);
+			break;
+		default:
+			size = physx::PxBoxGeometry(holder.box()).halfExtents;
+			return size.x * size.y * size.z;
 			break;
 		}
 	}

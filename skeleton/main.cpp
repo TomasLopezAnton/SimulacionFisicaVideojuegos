@@ -33,6 +33,7 @@
 #include "ExplosionForceGenerator.h"
 
 #include "RBWindForceGenerator.h"
+#include "BuoyancyForceGeneratorRB.h"
 
 using namespace physx;
 
@@ -60,6 +61,8 @@ std::vector<ParticleSystem*> particleSystems;
 std::vector<RigidbodySystem*> RBSystems;
 
 ParticleSystem* bullets;
+ParticleSystem* waterSystem;
+ParticleSystem* debugSystem;
 SpringParticleSystem* springs;
 FireworkSystem* fireworks;
 
@@ -74,8 +77,10 @@ RBWindForceGenerator* RBwindGenerator;
 // Aceleracion de los cohetes
 double rocketJet = 10;
 
+Particle* water;
+
 StaticRigidbody* suelo;
-DinamicRigidbody* objeto;
+DinamicRigidbody* boat;
 GaussianBodyGenerator* generator;
 
 // Initialize physics engine
@@ -106,22 +111,45 @@ void initPhysics(bool interactive)
 
 	gScene = gPhysics->createScene(sceneDesc);
 
-	physx::PxTransform floorPose = physx::PxTransform({ 0.0, 0.0, 0.0 });
-	suelo = new StaticRigidbody(gPhysics, gScene, floorPose, gMaterial, new PxBoxGeometry(1000.0, 10.0, 1000.0), { 0.5, 1.0, 0.2, 1.0 }, 1e6);
+	waterSystem = new ParticleSystem();
+	debugSystem = new ParticleSystem();
 
-	physx::PxTransform objetoPose = physx::PxTransform({ 0.0, -1000.0, 0.0 });
-	objeto = new DinamicRigidbody(gPhysics, gScene, objetoPose, gMaterial, new PxBoxGeometry(1.0, 1.0, 1.0), { 1.0, 0.0, 0.0, 1.0 }, 10);
+	particleSystems.push_back(debugSystem);
 
-	RigidbodySystem* cubes = new RigidbodySystem();
+	water = new Particle({ 0.0, 1.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1e6, 0.99, { 0.0, 0.0, 1.0, 1.0 }, 1e6, new physx::PxBoxGeometry(100.0, 1.8, 100.0));
+	waterSystem->addParticle(water);
 
-	RBSystems.push_back(cubes);
+	particleSystems.push_back(waterSystem);
 
-	generator = new GaussianBodyGenerator("Gen", objeto, { 0.0, 150.0, 0.0 }, { 0.0, 0.0, 0.0 }, { 0.1, 0.1, 0.1 }, { 20, 0.1, 20 }, 1);
-	cubes->addGenerator(generator);
+	RigidbodySystem* boatSystem = new RigidbodySystem();
 
-	RBwindGenerator = new RBWindForceGenerator({ -100.0, 0.0, -100.0 }, 0.1, 0.001, { 0.0, 40.0, 0.0 }, 0.0, 50.0);
+	physx::PxTransform boatPose = physx::PxTransform({ 0.0, 5, 0.0 });
+	boat = new DinamicRigidbody(gPhysics, gScene, boatPose, gMaterial, new PxBoxGeometry(10.0, 1.5, 6.0), { 1.0, 0.0, 0.0, 1.0 }, 10e6);
+	boat->setMass(1000);
 
-	cubes->addForceGenerator(RBwindGenerator);
+	boatSystem->addRigidbody(boat);
+
+	BuoyancyForceGeneratorRB* buoyancy = new BuoyancyForceGeneratorRB(1.0, 1000.0, water, debugSystem);
+
+	boatSystem->addForceGenerator(buoyancy);
+
+	//physx::PxTransform floorPose = physx::PxTransform({ 0.0, 0.0, 0.0 });
+	//suelo = new StaticRigidbody(gPhysics, gScene, floorPose, gMaterial, new PxBoxGeometry(1000.0, 10.0, 1000.0), { 0.5, 1.0, 0.2, 1.0 }, 1e6);
+
+	//physx::PxTransform objetoPose = physx::PxTransform({ 0.0, -1000.0, 0.0 });
+	//objeto = new DinamicRigidbody(gPhysics, gScene, objetoPose, gMaterial, new PxBoxGeometry(1.0, 1.0, 1.0), { 1.0, 0.0, 0.0, 1.0 }, 10);
+
+	//RigidbodySystem* cubes = new RigidbodySystem();
+
+	RBSystems.push_back(boatSystem);
+
+	//generator = new GaussianBodyGenerator("Gen", objeto, { 0.0, 150.0, 0.0 }, { 0.0, 0.0, 0.0 }, { 0.1, 0.1, 0.1 }, { 20, 0.1, 20 }, 1);
+	//cubes->addGenerator(generator);
+
+	//RBwindGenerator = new RBWindForceGenerator({ -100.0, 0.0, -100.0 }, 0.1, 0.001, { 0.0, 40.0, 0.0 }, 40.0, 50.0);
+	//boatSystem->addForceGenerator(RBwindGenerator);
+
+	//cubes->addForceGenerator(RBwindGenerator);
 }
 
 	
@@ -169,8 +197,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	case ' ':
+	case 'O':
 	{
+		boat->rotate({0.9999999, 0.0087265, 0, 0});
 		break;
 	}
 	default:

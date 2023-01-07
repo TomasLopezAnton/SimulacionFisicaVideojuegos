@@ -88,6 +88,9 @@
     <ClCompile Include="RigidbodySystem.cpp">
       <Filter>RigidBodies\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="BuoyancyForceGeneratorRB.cpp">
+      <Filter>RigidBodies\Forces</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -143,7 +146,6 @@
       <Filter>ParticleGenerators</Filter>
     </ClInclude>
     <ClInclude Include="checkML.h" />
-    <ClInclude Include="RocketSystem.h" />
     <ClInclude Include="ForceGenerator.h">
       <Filter>ForceGenerators</Filter>
     </ClInclude>
@@ -209,6 +211,12 @@
     </ClInclude>
     <ClInclude Include="RigidbodyForceRegistry.h">
       <Filter>RigidBodies\Forces</Filter>
+    </ClInclude>
+    <ClInclude Include="BuoyancyForceGeneratorRB.h">
+      <Filter>RigidBodies\Forces</Filter>
+    </ClInclude>
+    <ClInclude Include="RocketSystem.h">
+      <Filter>ParticleSystems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

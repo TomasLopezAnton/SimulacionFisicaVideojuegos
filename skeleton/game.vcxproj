@@ -256,6 +256,7 @@
     <ClCompile Include="AnchoredSpringFG.cpp" />
     <ClCompile Include="BungeeForceGenerator.cpp" />
     <ClCompile Include="BuoyancyForceGenerator.cpp" />
+    <ClCompile Include="BuoyancyForceGeneratorRB.cpp" />
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="Cannonball.cpp" />
     <ClCompile Include="CircleGenerator.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="AnchoredSpringFG.h" />
     <ClInclude Include="BungeeForceGenerator.h" />
     <ClInclude Include="BuoyancyForceGenerator.h" />
+    <ClInclude Include="BuoyancyForceGeneratorRB.h" />
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="Cannonball.h" />
     <ClInclude Include="checkML.h" />

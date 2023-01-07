@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Rigidbody.h"
+#include "DinamicRigidbody.h"
 #include <list>
 #include <random>
 
