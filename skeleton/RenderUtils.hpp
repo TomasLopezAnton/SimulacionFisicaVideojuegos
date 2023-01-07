@@ -59,6 +59,17 @@ public:
 	unsigned references;
 };
 
+class CameraTarget;
+void RegisterCameraTarget(CameraTarget* t);
+
+class CameraTarget
+{
+public:
+	CameraTarget(physx::PxTransform* t) : transform(t) { RegisterCameraTarget(this); };
+
+	physx::PxTransform* transform;
+};
+
 double GetLastTime();
 Camera* GetCamera();
 

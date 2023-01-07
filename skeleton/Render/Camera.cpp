@@ -54,7 +54,7 @@ void Camera::handleMouse(int button, int state, int x, int y)
 	mMouseY = y;
 }
 
-bool Camera::handleKey(unsigned char key, int x, int y, float speed)
+bool Camera::handleKey(unsigned char key, int x, int y, physx::PxTransform* target = nullptr, float speed)
 {
 	PX_UNUSED(x);
 	PX_UNUSED(y);
@@ -62,12 +62,15 @@ bool Camera::handleKey(unsigned char key, int x, int y, float speed)
 	PxVec3 viewY = mDir.cross(PxVec3(0,1,0)).getNormalized();
 	switch(toupper(key))
 	{
-	case 'W':	mEye += mDir*2.0f*speed;		break;
-	case 'S':	mEye -= mDir*2.0f*speed;		break;
+	case 'W':	mEye += mDir*0.1f*speed;		break;
+	case 'S':	mEye -= mDir*0.1f*speed;		break;
 	case 'A':	mEye -= viewY*2.0f*speed;		break;
 	case 'D':	mEye += viewY*2.0f*speed;		break;
 	default:							return false;
 	}
+
+	if(target != nullptr) mDir = target->p - mEye;
+
 	return true;
 }
 

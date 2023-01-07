@@ -16,6 +16,7 @@ extern PxPhysics* gPhysics;
 extern PxMaterial* gMaterial;
 
 std::vector<const RenderItem*> gRenderItems;
+CameraTarget* gTarget = nullptr;
 
 double PCFreq = 0.0;
 __int64 CounterStart = 0;
@@ -57,7 +58,7 @@ void keyboardCallback(unsigned char key, int x, int y)
 	if(key==27)
 		exit(0);
 
-	if(!sCamera->handleKey(key, x, y))
+	if(!sCamera->handleKey(key, x, y, gTarget->transform))
 		keyPress(key, sCamera->getTransform());
 }
 
@@ -137,7 +138,7 @@ void exitCallback(void)
 void renderLoop()
 {
 	StartCounter();
-	sCamera = new Camera(PxVec3(50.0f, 50.0f, 50.0f), PxVec3(-0.6f,-0.2f,-0.7f));
+	sCamera = new Camera(PxVec3(40.0f, 15.0f, 0.0f), PxVec3(-0.8f, -0.2f, 0.0f));
 
 	setupDefaultWindow("Sail Away");
 	setupDefaultRenderState();
@@ -164,6 +165,11 @@ void DeregisterRenderItem(const RenderItem* _item)
 {
 	auto it = find(gRenderItems.begin(), gRenderItems.end(), _item);
 	gRenderItems.erase(it);
+}
+
+void RegisterCameraTarget(CameraTarget* _target)
+{
+	gTarget = _target;
 }
 
 double GetLastTime()

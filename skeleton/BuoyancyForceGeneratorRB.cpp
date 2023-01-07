@@ -25,9 +25,9 @@ void BuoyancyForceGeneratorRB::updateForce(Rigidbody* b, double t)
 
 		force /= 8000000;
 
-		psystem->addParticle(new Particle(positions[i], { 0, 0, 0 }, 1e9, 1, { 0.0, 0.0, 0.0 }, 0.05, { 0, 1.0, 0.0, 1.0 }, { 2.0, 2.0, 2.0 }));
+		//psystem->addParticle(new Particle(positions[i], { 0, 0, 0 }, 1e9, 1, { 0.0, 0.0, 0.0 }, 0.05, { 0, 1.0, 0.0, 1.0 }, { 2.0, 2.0, 2.0 }));
 
-		b->addTorque(force.y * positions[i]);
+		//b->addTorque(force.y * positions[i]);
 	}
 
 	std::cout << "\n";
