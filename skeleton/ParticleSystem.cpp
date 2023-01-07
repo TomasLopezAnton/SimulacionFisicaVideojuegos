@@ -22,6 +22,13 @@ ParticleSystem::~ParticleSystem()
 	forceRegistry->clear();
 }
 
+ParticleGenerator* ParticleSystem::getParticleGenerator(std::string name)
+{
+	for (ParticleGenerator* pg : particleGenerators) if (pg->getName() == name) return pg;
+
+	return nullptr;
+}
+
 void ParticleSystem::update(double t)
 {
 	forceRegistry->updateForces(t);

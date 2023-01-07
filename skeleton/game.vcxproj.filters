@@ -91,6 +91,9 @@
     <ClCompile Include="BuoyancyForceGeneratorRB.cpp">
       <Filter>RigidBodies\Forces</Filter>
     </ClCompile>
+    <ClCompile Include="CloudSystem.cpp">
+      <Filter>ParticleSystems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -216,6 +219,9 @@
       <Filter>RigidBodies\Forces</Filter>
     </ClInclude>
     <ClInclude Include="RocketSystem.h">
+      <Filter>ParticleSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="CloudSystem.h">
       <Filter>ParticleSystems</Filter>
     </ClInclude>
   </ItemGroup>

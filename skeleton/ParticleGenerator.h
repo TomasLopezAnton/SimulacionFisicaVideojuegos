@@ -17,6 +17,8 @@ public:
 	void setMedianVelocity(Vector3 mv) { meanVel = mv; };
 	void setParticleNumber(int n) { numParticles = n; };
 
+	std::string getName() { return name; };
+
 protected:
 	std::string name;
 	Vector3 meanPos, meanVel;

@@ -25,6 +25,7 @@
 #include "FireworkSystem.h"
 #include "ContinuousParticleSystem.h"
 #include "SpringParticleSystem.h"
+#include "CloudSystem.h"
 
 #include "RigidbodySystem.h"
 
@@ -62,6 +63,7 @@ std::vector<RigidbodySystem*> RBSystems;
 
 ParticleSystem* bullets;
 ParticleSystem* waterSystem;
+CloudSystem* cloudSystem;
 ParticleSystem* debugSystem;
 SpringParticleSystem* springs;
 FireworkSystem* fireworks;
@@ -70,6 +72,8 @@ FireworkSystem* fireworks;
 WindForceGenerator* windGenerator;
 VortexGenerator* vortex;
 ExplosionForceGenerator* explosion;
+
+GaussianParticleGenerator* cloudGenerator;
 
 
 RBWindForceGenerator* RBwindGenerator;
@@ -113,10 +117,16 @@ void initPhysics(bool interactive)
 
 	waterSystem = new ParticleSystem();
 	debugSystem = new ParticleSystem();
+	cloudSystem = new CloudSystem({15, 15, 30}, {1000, 10, 1000}, 200, 2);
 
+	cloudSystem->setGravity({ 0.0, 0.0, 0.0 });
+
+	cloudSystem->addForceGenerator(new WindForceGenerator({ 20.0, 0.0, -8.0 }, 0.1, 0.001, { 0.0, 100.0, 0.0 }, 500.0, 500.0));
+
+	particleSystems.push_back(cloudSystem);
 	particleSystems.push_back(debugSystem);
 
-	water = new Particle({ 0.0, 1.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1e6, 0.99, { 0.0, 0.0, 1.0, 1.0 }, 1e6, new physx::PxBoxGeometry(100.0, 1.8, 100.0));
+	water = new Particle({ 0.0, 1.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1e6, 0.99, { 0.0, 0.0, 1.0, 1.0 }, 1e6, new physx::PxBoxGeometry(10000.0, 1.8, 10000.0));
 	waterSystem->addParticle(water);
 
 	particleSystems.push_back(waterSystem);
