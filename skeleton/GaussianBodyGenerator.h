@@ -10,6 +10,9 @@ public:
 	void setPositionDeviation(Vector3 pd) { stdDevPos = pd; };
 	void setVelocityDeviation(Vector3 vd) { stdDevVel = vd; };
 
+	Vector3 getStdDevVel() { return stdDevVel; };
+	Vector3 getStdDevPos() { return stdDevPos; };
+
 protected:
 	Vector3 stdDevVel;
 	Vector3 stdDevPos;

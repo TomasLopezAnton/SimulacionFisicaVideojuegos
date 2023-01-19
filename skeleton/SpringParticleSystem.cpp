@@ -66,7 +66,7 @@ void SpringParticleSystem::generateBuoyantParticle()
 
 	particles.push_back(p);
 
-	BuoyancyForceGenerator* f = new BuoyancyForceGenerator(1, 2.0, 1000.0, water, this);
+	BuoyancyForceGenerator* f = new BuoyancyForceGenerator(1, 1000.0, water, this);
 	forceGenerators.push_back(f);
 
 	forceRegistry->addRegistry(f, p);

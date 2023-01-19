@@ -28,11 +28,13 @@
 // Copyright (c) 2001-2004 NovodeX AG. All rights reserved.  
 
 
+#pragma once
 
 #include "Camera.h"
 #include <ctype.h>
 #include "foundation/PxMat33.h"
 #include <iostream>
+#include "glut.h"
 
 using namespace physx;
 
@@ -55,7 +57,7 @@ void Camera::handleMouse(int button, int state, int x, int y)
 	mMouseY = y;
 }
 
-physx::PxVec3 Camera::handleKey(unsigned char key, int x, int y, physx::PxVec3 d, physx::PxTransform* target = nullptr, float speed)
+physx::PxVec3 Camera::handleKey(int key, int x, int y, physx::PxVec3 d, physx::PxTransform* target = nullptr, float speed)
 {
 	PX_UNUSED(x);
 	PX_UNUSED(y);
@@ -74,15 +76,15 @@ physx::PxVec3 Camera::handleKey(unsigned char key, int x, int y, physx::PxVec3 d
 
 
 	PxVec3 viewY = mDir.cross(PxVec3(0,1,0)).getNormalized();
-	switch(toupper(key))
+	switch(key)
 	{
-	case 'W':	mEye += mDir*0.1f*speed;		break;
-	case 'S':	mEye -= mDir*0.1f*speed;		break;
-	case 'A':
+	case GLUT_KEY_UP:	if(distance > 30) mEye += mDir*0.1f*speed;		break;
+	case GLUT_KEY_DOWN:	mEye -= mDir*0.1f*speed;		break;
+	case GLUT_KEY_LEFT:
 		v = (d - (viewY * hSpeed * speed)).getNormalized() * distance;
 		mEye = PxVec3( v.x, d.y, v.z) + target->p;
 		break;
-	case 'D':
+	case GLUT_KEY_RIGHT:
 		v = (d + (viewY * hSpeed * speed)).getNormalized() * distance;
 		mEye = PxVec3(v.x, d.y, v.z) + target->p;
 		break;
@@ -152,7 +154,7 @@ PxTransform Camera::getTransform() const
 	if(viewY.normalize()<1e-6f) 
 		return PxTransform(mEye);
 
-	PxMat33 m(mDir.cross(viewY), viewY, -mDir);
+	PxMat33 m(mDir.getNormalized().cross(viewY), viewY, -mDir.getNormalized());
 	return PxTransform(mEye, PxQuat(m));
 }
 

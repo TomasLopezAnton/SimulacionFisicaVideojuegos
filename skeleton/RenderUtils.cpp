@@ -55,14 +55,16 @@ void motionCallback(int x, int y)
 
 void keyboardCallback(unsigned char key, int x, int y)
 {
-	if(key==27)
+	if (key == 27)
 		exit(0);
 
-	gTarget->transform = &gTarget->targetBody->getGlobalPose();
-	gTarget->targetDistance = sCamera->handleKey(key, x, y, gTarget->targetDistance, gTarget->transform);
+	keyPress(key, sCamera->getTransform());
+}
 
-	if(gTarget->targetDistance.x == (float)1e6)
-		keyPress(key, sCamera->getTransform());
+void specialKeyboardCallback(int key, int x, int y)
+{
+	gTarget->transform = &gTarget->targetBody->getGlobalPose();
+	gTarget->targetDistance = sCamera->handleKey(key, x, y, gTarget->targetDistance, gTarget->transform);	
 }
 
 void mouseCallback(int button, int state, int x, int y)
@@ -151,6 +153,7 @@ void renderLoop()
 	glutIdleFunc(idleCallback);
 	glutDisplayFunc(renderCallback);
 	glutKeyboardFunc(keyboardCallback);
+	glutSpecialFunc(specialKeyboardCallback);
 	glutMouseFunc(mouseCallback);
 	glutMotionFunc(motionCallback);
 	motionCallback(0,0);

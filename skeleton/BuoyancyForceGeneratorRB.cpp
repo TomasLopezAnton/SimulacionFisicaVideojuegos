@@ -10,26 +10,20 @@ void BuoyancyForceGeneratorRB::updateForce(Rigidbody* b, double t)
 	physx::PxQuat bodyRotation = b->getRotation().getNormalized();
 	Vector3 force;
 
-	Vector3 positions[] = { Vector3(1, 0, 0), Vector3( -1, 0, 0.0 )};
+	Vector3 positions[] = { Vector3(6, 0, 0), Vector3( -6, 0, 0.0), Vector3(0, 0, 4.0), Vector3(0, 0, -4.0) };
 
 
-	for (int i = 0; i < 2; i++) 
+	for (int i = 0; i < 4; i++) 
 	{
 		Vector3 newPos = bodyRotation.rotate(positions[i]);
 		newPos += b->getPosition();
 		force = calculateForce(newPos.y, b);
 
-		force /= 400;
+		force /= 200;
 
-		psystem->addParticle(new Particle(newPos, { 0, 0, 0 }, 1e9, 1, { 0.0, 0.0, 0.0 }, 0.05, { 0, 1.0, 0.0, 1.0 }, { 2.0, 2.0, 2.0 }));
-
-		//std::cout << positions[i].cross(force).z << " \n ";
+		//psystem->addParticle(new Particle(newPos, { 0, 0, 0 }, 1e9, 1, { 0.0, 0.0, 0.0 }, 0.05, { 0, 1.0, 0.0, 1.0 }, { 2.0, 2.0, 2.0 }));
 
 		b->addTorque(positions[i].cross(force));
-
-		//std::cout << newPos.y << " \n ";
-
-		//b->addForce(force);
 	}
 
 	b->addForce(calculateForce(h, b));

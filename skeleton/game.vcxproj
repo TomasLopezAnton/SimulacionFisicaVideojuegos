@@ -269,6 +269,7 @@
     <ClCompile Include="Firework.cpp" />
     <ClCompile Include="FireworkGenerator.cpp" />
     <ClCompile Include="FireworkSystem.cpp" />
+    <ClCompile Include="FoamSystem.cpp" />
     <ClCompile Include="GaussianBodyGenerator.cpp" />
     <ClCompile Include="GaussianParticleGenerator.cpp" />
     <ClCompile Include="GravityForceGenerator.cpp" />
@@ -311,6 +312,7 @@
     <ClInclude Include="FireworkGenerator.h" />
     <ClInclude Include="FireworksRules.h" />
     <ClInclude Include="FireworkSystem.h" />
+    <ClInclude Include="FoamSystem.h" />
     <ClInclude Include="ForceGenerator.h" />
     <ClInclude Include="GaussianBodyGenerator.h" />
     <ClInclude Include="GaussianParticleGenerator.h" />

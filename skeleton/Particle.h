@@ -28,7 +28,9 @@ public:
 
 	void setVelocity(Vector3 v) { vel = v; };
 
-	void setPosition(Vector3 p) { pose = physx::PxTransform(p.x, p.y, p.z); };
+	void setPosition(Vector3 p) { pose.p = { p.x, p.y, p.z }; };
+
+	void setRotation(physx::PxQuat q) { pose.q = q; };
 
 	void setTime(int t) { remainingTime = t; };
 
@@ -39,6 +41,8 @@ public:
 	Vector3 getVelocity() { return vel; };
 
 	Vector3 getPosition() { return pose.p; };
+
+	physx::PxQuat getRotation() { return pose.q; };
 
 	double getMass() { return mass; };
 

@@ -13,14 +13,15 @@ void AerodinamicForceGenerator::updateForce(Rigidbody* p, double duration)
 	normalVector = orientation.rotate(normalVector).getNormalized();
 	float windForce = pressure * area * windVel.getNormalized().dot(normalVector);
 
-	float forwardForce = orientation.rotate(rudderDirection->getNormalized()).dot(normalVector) * windForce;
+	float torqueForce = orientation.rotate(rudderDirection->getNormalized()).z * windForce;
+	float forwardForce = (abs(windForce) - abs(torqueForce)) * ((windForce > 0) - (windForce < 0));
 
 	boat->addForce(boat->getRotation().rotate({ 1, 0, 0 }) * forwardForce);
 
-	boat->addTorque(rudderPosition * (windForce - forwardForce));
+	boat->addTorque(rudderPosition * torqueForce);
 	//boat->addTorque({0, 100000, 0});
 
-	Vector3 torque = rudderPosition * (windForce - forwardForce);
+	Vector3 torque = rudderPosition * torqueForce;
 
-	std::cout << torque.x << " " << torque.y << " " << torque.z << "\n";
+	//std::cout << torque.x << " " << torque.y << " " << torque.z << "\n";
 }

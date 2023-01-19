@@ -26,6 +26,7 @@
 #include "ContinuousParticleSystem.h"
 #include "SpringParticleSystem.h"
 #include "CloudSystem.h"
+#include "FoamSystem.h"
 
 #include "RigidbodySystem.h"
 #include "BoatSystem.h"
@@ -65,6 +66,7 @@ std::vector<RigidbodySystem*> RBSystems;
 ParticleSystem* bullets;
 ParticleSystem* waterSystem;
 CloudSystem* cloudSystem;
+FoamSystem* foamSystem;
 ParticleSystem* debugSystem;
 SpringParticleSystem* springs;
 FireworkSystem* fireworks;
@@ -87,6 +89,8 @@ Particle* water;
 StaticRigidbody* suelo;
 DinamicRigidbody* boat;
 GaussianBodyGenerator* generator;
+
+BoatSystem* boatSystem;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -123,11 +127,16 @@ void initPhysics(bool interactive)
 
 	CameraTarget* t = new CameraTarget(boat->getRigidbody());
 
-	BoatSystem* boatSystem = new BoatSystem(boat, gPhysics, windGenerator);
+	boatSystem = new BoatSystem(boat, gPhysics, windGenerator);
+
+	water = new Particle({ 0.0, 1.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1e6, 0.99, { 0.0, 0.25, 0.35, 1.0 }, 1e6, new physx::PxBoxGeometry(10000.0, 2.5, 10000.0));
 
 	waterSystem = new ParticleSystem();
 	debugSystem = new ParticleSystem();
 	cloudSystem = new CloudSystem(boat, {15, 15, 30}, {2000, 10, 2000}, 200, 25, 1);
+	foamSystem = new FoamSystem(boat, water);
+
+	waterSystem->addParticle(water);
 
 	cloudSystem->setGravity({ 0.0, 0.0, 0.0 });
 
@@ -136,10 +145,12 @@ void initPhysics(bool interactive)
 	particleSystems.push_back(cloudSystem);
 	particleSystems.push_back(debugSystem);
 
-	water = new Particle({ 0.0, 1.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1e6, 0.99, { 0.0, 0.25, 0.35, 1.0 }, 1e6, new physx::PxBoxGeometry(10000.0, 2.5, 10000.0));
-	waterSystem->addParticle(water);
+	foamSystem->addForceGenerator(new BuoyancyForceGenerator(1, 1000.0, water, foamSystem));
+	foamSystem->setGravity({ 0.0, -20, 0.0 });
+	foamSystem->generateContinously(true);
 
 	particleSystems.push_back(waterSystem);
+	particleSystems.push_back(foamSystem);
 
 	BuoyancyForceGeneratorRB* buoyancy = new BuoyancyForceGeneratorRB(10, 1000.0, water, debugSystem);
 
@@ -207,11 +218,26 @@ void keyPress(unsigned char key, const PxTransform& camera)
 {
 	PX_UNUSED(camera);
 
-	switch(toupper(key))
+	switch (toupper(key))
 	{
-	case 'O':
+	case 'D':
 	{
-		boat->rotate({0.9999999, 0.0087265, 0, 0});
+		boatSystem->changeRudderDirection(1);
+		break;
+	}
+	case 'A':
+	{
+		boatSystem->changeRudderDirection(-1);
+		break;
+	}
+	case 'Q':
+	{
+		boatSystem->rotateSail(PxQuat(-PxPi / 16, PxVec3(0, 1, 0)));
+		break;
+	}
+	case 'E':
+	{
+		boatSystem->rotateSail(PxQuat(PxPi / 16, PxVec3(0, 1, 0)));
 		break;
 	}
 	default:

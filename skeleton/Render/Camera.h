@@ -41,7 +41,7 @@ public:
 	Camera(const physx::PxVec3 &eye, const physx::PxVec3& dir);
 
 	void				handleMouse(int button, int state, int x, int y);
-	physx::PxVec3		handleKey(unsigned char key, int x, int y, physx::PxVec3 d, physx::PxTransform* target, float speed = 1.0f);
+	physx::PxVec3		handleKey(int key, int x, int y, physx::PxVec3 d, physx::PxTransform* target, float speed = 1.0f);
 	void				handleMotion(int x, int y);
 	void				handleAnalogMove(float x, float y);
 	void		update(physx::PxVec3 distance, physx::PxTransform* target);
