@@ -65,9 +65,11 @@ void RegisterCameraTarget(CameraTarget* t);
 class CameraTarget
 {
 public:
-	CameraTarget(physx::PxTransform* t) : transform(t) { RegisterCameraTarget(this); };
+	CameraTarget(physx::PxRigidBody* b) : targetBody(b), transform(&b->getGlobalPose()) { RegisterCameraTarget(this); };
 
+	physx::PxRigidBody* targetBody;
 	physx::PxTransform* transform;
+	physx::PxVec3 targetDistance;
 };
 
 double GetLastTime();

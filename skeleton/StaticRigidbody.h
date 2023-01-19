@@ -30,7 +30,11 @@ public:
 
 	void setPosition(Vector3 p) { transform.p = p; rigidbody->setGlobalPose(transform); }
 
+	void setRotation(physx::PxQuat r) { physx::PxTransform t = rigidbody->getGlobalPose(); t.q = r; rigidbody->setGlobalPose(t); };
+
 	physx::PxRigidStatic* getRigidbody() { return rigidbody; };
+
+	Vector3 getPosition() { return rigidbody->getGlobalPose().p; };
 
 	virtual physx::PxQuat getRotation() { return rigidbody->getGlobalPose().q; };
 

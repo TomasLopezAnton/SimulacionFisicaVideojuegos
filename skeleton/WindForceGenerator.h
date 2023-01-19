@@ -15,6 +15,8 @@ public:
 
 	void setCoefficients(double K1, double K2) { k1 = K1; k2 = K2; };
 
+	Vector3 getVelocity() { return velocity; };
+
 protected:
 	Vector3 velocity;
 	Vector3 position;

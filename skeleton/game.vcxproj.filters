@@ -94,6 +94,12 @@
     <ClCompile Include="CloudSystem.cpp">
       <Filter>ParticleSystems</Filter>
     </ClCompile>
+    <ClCompile Include="AerodinamicForceGenerator.cpp">
+      <Filter>RigidBodies\Forces</Filter>
+    </ClCompile>
+    <ClCompile Include="BoatSystem.cpp">
+      <Filter>RigidBodies\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -223,6 +229,12 @@
     </ClInclude>
     <ClInclude Include="CloudSystem.h">
       <Filter>ParticleSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="AerodinamicForceGenerator.h">
+      <Filter>RigidBodies\Forces</Filter>
+    </ClInclude>
+    <ClInclude Include="BoatSystem.h">
+      <Filter>RigidBodies\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

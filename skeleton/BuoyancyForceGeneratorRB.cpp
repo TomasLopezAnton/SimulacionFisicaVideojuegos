@@ -10,27 +10,27 @@ void BuoyancyForceGeneratorRB::updateForce(Rigidbody* b, double t)
 	physx::PxQuat bodyRotation = b->getRotation().getNormalized();
 	Vector3 force;
 
-	Vector3 positions[] = { Vector3(8, h - 0.01, 0), Vector3( -8, h, 0 ), Vector3(0, h, 4), Vector3(0, h, -4)};
+	Vector3 positions[] = { Vector3(1, 0, 0), Vector3( -1, 0, 0.0 )};
 
 
-	for (int i = 0; i < 4; i++) 
+	for (int i = 0; i < 2; i++) 
 	{
-		positions[i] = bodyRotation.rotate(positions[i]);
-		force = calculateForce(positions[i].y, b);
-		std::cout << force.y << " | ";
-		if (force.y != 0.0)
-		{
-			bool t;
-		}
+		Vector3 newPos = bodyRotation.rotate(positions[i]);
+		newPos += b->getPosition();
+		force = calculateForce(newPos.y, b);
 
-		force /= 8000000;
+		force /= 400;
 
-		//psystem->addParticle(new Particle(positions[i], { 0, 0, 0 }, 1e9, 1, { 0.0, 0.0, 0.0 }, 0.05, { 0, 1.0, 0.0, 1.0 }, { 2.0, 2.0, 2.0 }));
+		psystem->addParticle(new Particle(newPos, { 0, 0, 0 }, 1e9, 1, { 0.0, 0.0, 0.0 }, 0.05, { 0, 1.0, 0.0, 1.0 }, { 2.0, 2.0, 2.0 }));
 
-		//b->addTorque(force.y * positions[i]);
+		//std::cout << positions[i].cross(force).z << " \n ";
+
+		b->addTorque(positions[i].cross(force));
+
+		//std::cout << newPos.y << " \n ";
+
+		//b->addForce(force);
 	}
-
-	std::cout << "\n";
 
 	b->addForce(calculateForce(h, b));
 }

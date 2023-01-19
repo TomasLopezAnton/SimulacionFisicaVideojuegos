@@ -11,9 +11,9 @@ public:
 	Rigidbody(physx::PxPhysics* physics, physx::PxScene* s, physx::PxGeometry* g, physx::PxMaterial* m, physx::PxTransform t, Vector4 c, double time)
 		: scene(s), gPhysics(physics), geometry(g), material(m), transform(t), col(c), remainingTime(time) {};
 
-	virtual ~Rigidbody() 
-	{ 
-		shape->release(); 
+	virtual ~Rigidbody()
+	{
+		shape->release();
 		DeregisterRenderItem(renderItem);
 		delete renderItem;
 	}
@@ -40,9 +40,15 @@ public:
 
 	float getTime() { return remainingTime; };
 
-	float getVolume() { return extractVolume(shape->getGeometry()); }
+	float getVolume() { return extractVolume(shape->getGeometry()); };
 
-	Vector3 getGravity() { return scene->getGravity(); }
+	Vector3 getDimensions() { return extractDimensions(shape->getGeometry()); };
+
+	Vector3 getGravity() { return scene->getGravity(); };
+
+	physx::PxMaterial* getMaterial(){ return material; };
+	
+	physx::PxScene* getScene(){ return scene; };
 
 	virtual void addForce(Vector3 f) {};
 
@@ -110,6 +116,23 @@ protected:
 		default:
 			size = physx::PxBoxGeometry(holder.box()).halfExtents;
 			return size.x * size.y * size.z;
+			break;
+		}
+	}
+
+	Vector3 extractDimensions(physx::PxGeometryHolder holder)
+	{
+		Vector3 size;
+
+		switch (holder.getType())
+		{
+		case physx::PxGeometryType::eBOX:
+			size = physx::PxBoxGeometry(holder.box()).halfExtents;
+			return { size.x, size.y, size.z };
+			break;
+		default:
+			size = physx::PxBoxGeometry(holder.box()).halfExtents;
+			return { size.x, size.y, size.z };
 			break;
 		}
 	}

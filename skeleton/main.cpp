@@ -28,6 +28,7 @@
 #include "CloudSystem.h"
 
 #include "RigidbodySystem.h"
+#include "BoatSystem.h"
 
 #include "WindForceGenerator.h"
 #include "VortexGenerator.h"
@@ -115,32 +116,32 @@ void initPhysics(bool interactive)
 
 	gScene = gPhysics->createScene(sceneDesc);
 
+	windGenerator = new WindForceGenerator({ -20.0, 0.0, 8.0 }, 0.1, 0.001, { 0.0, 100.0, 0.0 }, 500.0, 500.0);
+
+	physx::PxTransform* boatPose = new physx::PxTransform({ 0.0, 5, 0.0 });
+	boat = new DinamicRigidbody(gPhysics, gScene, *boatPose, gMaterial, new PxBoxGeometry(10.0, 1.6, 6.0), { 0.2, 0.1, 0.0, 1.0 }, 10e6, 25);
+
+	CameraTarget* t = new CameraTarget(boat->getRigidbody());
+
+	BoatSystem* boatSystem = new BoatSystem(boat, gPhysics, windGenerator);
+
 	waterSystem = new ParticleSystem();
 	debugSystem = new ParticleSystem();
-	cloudSystem = new CloudSystem({15, 15, 30}, {1000, 10, 1000}, 200, 0.5);
+	cloudSystem = new CloudSystem(boat, {15, 15, 30}, {2000, 10, 2000}, 200, 25, 1);
 
 	cloudSystem->setGravity({ 0.0, 0.0, 0.0 });
 
-	cloudSystem->addForceGenerator(new WindForceGenerator({ -20.0, 0.0, 8.0 }, 0.1, 0.001, { 0.0, 100.0, 0.0 }, 500.0, 500.0));
+	cloudSystem->addForceGenerator(windGenerator);
 
 	particleSystems.push_back(cloudSystem);
 	particleSystems.push_back(debugSystem);
 
-	water = new Particle({ 0.0, 1.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1e6, 0.99, { 0.0, 0.25, 0.35, 1.0 }, 1e6, new physx::PxBoxGeometry(10000.0, 1.8, 10000.0));
+	water = new Particle({ 0.0, 1.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1e6, 0.99, { 0.0, 0.25, 0.35, 1.0 }, 1e6, new physx::PxBoxGeometry(10000.0, 2.5, 10000.0));
 	waterSystem->addParticle(water);
 
 	particleSystems.push_back(waterSystem);
 
-	RigidbodySystem* boatSystem = new RigidbodySystem();
-
-	physx::PxTransform* boatPose = new physx::PxTransform({ 0.0, 5, 0.0 });
-	CameraTarget* t = new CameraTarget(boatPose);
-	boat = new DinamicRigidbody(gPhysics, gScene, *boatPose, gMaterial, new PxBoxGeometry(10.0, 1.59, 6.0), { 0.2, 0.1, 0.0, 1.0 }, 10e6);
-	boat->setMass(1000);
-
-	boatSystem->addRigidbody(boat);
-
-	BuoyancyForceGeneratorRB* buoyancy = new BuoyancyForceGeneratorRB(1.0, 1000.0, water, debugSystem);
+	BuoyancyForceGeneratorRB* buoyancy = new BuoyancyForceGeneratorRB(10, 1000.0, water, debugSystem);
 
 	boatSystem->addForceGenerator(buoyancy);
 

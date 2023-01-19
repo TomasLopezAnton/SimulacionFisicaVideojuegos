@@ -58,7 +58,10 @@ void keyboardCallback(unsigned char key, int x, int y)
 	if(key==27)
 		exit(0);
 
-	if(!sCamera->handleKey(key, x, y, gTarget->transform))
+	gTarget->transform = &gTarget->targetBody->getGlobalPose();
+	gTarget->targetDistance = sCamera->handleKey(key, x, y, gTarget->targetDistance, gTarget->transform);
+
+	if(gTarget->targetDistance.x == (float)1e6)
 		keyPress(key, sCamera->getTransform());
 }
 
@@ -69,6 +72,8 @@ void mouseCallback(int button, int state, int x, int y)
 
 void idleCallback()
 {
+	gTarget->transform = &gTarget->targetBody->getGlobalPose();
+	sCamera->update(gTarget->targetDistance, gTarget->transform);
 	glutPostRedisplay();
 }
 
@@ -170,6 +175,7 @@ void DeregisterRenderItem(const RenderItem* _item)
 void RegisterCameraTarget(CameraTarget* _target)
 {
 	gTarget = _target;
+	gTarget->targetDistance = sCamera->getEye() - gTarget->transform->p;
 }
 
 double GetLastTime()

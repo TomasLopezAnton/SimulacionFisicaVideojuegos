@@ -16,8 +16,8 @@ public:
 	RigidBodyGenerator* getRBGenerator(std::string name);
 	int getRBNumber() { return bodies.size(); };
 
-	void addRigidbody(Rigidbody* p) { bodies.push_back(p); };
-	void addGenerator(RigidBodyGenerator* g) { RBGenerators.push_back(g); };
+	void addRigidbody(Rigidbody* p) { bodies.push_back(p); for (RBForceGenerator* fg : forceGenerators) forceRegistry->addRegistry(fg, p); };
+	void addGenerator(RigidBodyGenerator* g) { RBGenerators.push_back(g);};
 	void addForceGenerator(RBForceGenerator* g);
 
 	void removeForceGenerator(RBForceGenerator* g);

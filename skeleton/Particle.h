@@ -34,6 +34,8 @@ public:
 
 	void setSize(Vector3 s) { size = s; };
 
+	void setColor(Vector4 c) { renderItem->color = c; };
+
 	Vector3 getVelocity() { return vel; };
 
 	Vector3 getPosition() { return pose.p; };

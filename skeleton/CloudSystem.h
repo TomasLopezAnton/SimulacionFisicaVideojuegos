@@ -2,27 +2,43 @@
 #include "ParticleSystem.h"
 #include "GaussianParticleGenerator.h"
 #include "UniformParticleGenerator.h"
+#include "DinamicRigidbody.h"
 
 class CloudSystem : public ParticleSystem
 {
 public:
-	CloudSystem(Vector3 s, Vector3 b, float n, float f) : cloudSize(s), bounds(b), nParticles(n), frequency(f), remainingTime(f)
+	CloudSystem(DinamicRigidbody* target, Vector3 s, Vector3 b, float nP, int nC, float f) : boat(target), cloudSize(s), bounds(b), nParticles(nP), maxClouds(nC), frequency(f)
 	{
-		Particle* cloudParticle = new Particle({ 0, -1000, 0 }, { 0, 0, 0 }, 0.1, 0.7, { 0, 0, 0 }, 2, { 0.9, 0.9, 0.9, 1.0 }, { 10, 10, 10 });
-		particleGenerators.push_back(new GaussianParticleGenerator("Cloud", cloudParticle, { 0, 50, 0 }, { 0.0, 0.0, 0.0 }, { 0.001, 0.001, 0.001 }, cloudSize, n));
+		Particle* cloudParticle = new Particle({ 0, -1000, 0 }, { 0, 0, 0 }, 0.1, 0.7, { 0, 0, 0 }, 1000, { 0.9, 0.9, 0.9, 1.0 }, { 15, 15, 15 });
+		particleGenerators.push_back(new GaussianParticleGenerator("Cloud", cloudParticle, { 0, 0, 0 }, { 0.0, 0.0, 0.0 }, { 0.001, 0.001, 0.001 }, cloudSize, 1));
 		particleGenerators.push_back(new UniformParticleGenerator("Seed", cloudParticle, { 0, 220, 0 }, {0, 0, 0}, {0, 0, 0}, bounds, 1));
+
+		for (int i = 0; i < maxClouds; i++)
+		{
+			generatedParticles.push_back(0);
+			seedDeltas.push_back({ 0, 0, 0 });
+		}
 	};
 
 	~CloudSystem() {};
 
 	virtual void update(double t);
 
+	void generateCloudParticle(int index, std::list<Particle*>* cloud);
+
+	void moveCloudParticle(int index, std::list<Particle*>* cloud);
+
 protected:
 	Vector3 cloudSize;
 	Vector3 bounds;
+	DinamicRigidbody* boat;
 	float nParticles;
+	int maxClouds;
+    int nClouds = 0;
+	float remainingTime = 0;
 	float frequency;
-	float remainingTime;
 private:
-	std::list<std::list<Particle*>> clouds;
+	std::list<std::list<Particle*>*> clouds;
+	std::vector<int> generatedParticles;
+	std::vector<Vector3> seedDeltas;
 };

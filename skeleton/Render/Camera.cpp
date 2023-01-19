@@ -32,6 +32,7 @@
 #include "Camera.h"
 #include <ctype.h>
 #include "foundation/PxMat33.h"
+#include <iostream>
 
 using namespace physx;
 
@@ -54,24 +55,60 @@ void Camera::handleMouse(int button, int state, int x, int y)
 	mMouseY = y;
 }
 
-bool Camera::handleKey(unsigned char key, int x, int y, physx::PxTransform* target = nullptr, float speed)
+physx::PxVec3 Camera::handleKey(unsigned char key, int x, int y, physx::PxVec3 d, physx::PxTransform* target = nullptr, float speed)
 {
 	PX_UNUSED(x);
 	PX_UNUSED(y);
+
+	float distance = 1;
+	float hSpeed = 1;
+	PxVec3 v;
+
+	if (target != nullptr)
+	{
+		distance = (target->p - mEye).magnitude();
+		//std::cout << "Initial distance: " << distance << "\n";
+
+	    hSpeed = speed * physx::PxClamp(distance / 10, (float)1.0, (float)100.0);
+	}
+
 
 	PxVec3 viewY = mDir.cross(PxVec3(0,1,0)).getNormalized();
 	switch(toupper(key))
 	{
 	case 'W':	mEye += mDir*0.1f*speed;		break;
 	case 'S':	mEye -= mDir*0.1f*speed;		break;
-	case 'A':	mEye -= viewY*2.0f*speed;		break;
-	case 'D':	mEye += viewY*2.0f*speed;		break;
-	default:							return false;
+	case 'A':
+		v = (d - (viewY * hSpeed * speed)).getNormalized() * distance;
+		mEye = PxVec3( v.x, d.y, v.z) + target->p;
+		break;
+	case 'D':
+		v = (d + (viewY * hSpeed * speed)).getNormalized() * distance;
+		mEye = PxVec3(v.x, d.y, v.z) + target->p;
+		break;
+	default:							return physx::PxVec3(-10e6, 0, 0);
 	}
 
-	if(target != nullptr) mDir = target->p - mEye;
+	//std::cout << "Final distance: " << (target->p - mEye).magnitude() << "\n\n";
 
-	return true;
+	if (target != nullptr)
+	{
+		//if ((target->p - mEye).magnitude() < 5)
+		//{
+		//	PxVec3 pos = -(target->p - mEye).getNormalized() * 5.0;
+		//	mEye = { pos.x, mEye.y, pos.z };
+		//}
+		//else if ((target->p - mEye).magnitude() > 50)
+		//{
+		//	PxVec3 pos = -(target->p - mEye).getNormalized() * 50.0;
+		//	mEye = { pos.x, mEye.y, pos.z };
+		//}
+		mDir = target->p - mEye;
+	}
+
+	d = mEye - target->p;
+
+	return d;
 }
 
 void Camera::handleAnalogMove(float x, float y)
@@ -97,6 +134,15 @@ void Camera::handleMotion(int x, int y)
 
 	mMouseX = x;
 	mMouseY = y;
+}
+
+void Camera::update(physx::PxVec3 distance, physx::PxTransform* target = nullptr)
+{
+	if (target != nullptr)
+	{
+		//std::cout << target->p.x << " " << target->p.y << " " << target->p.z << "\n";
+		mEye = target->p + distance;
+	}
 }
 
 PxTransform Camera::getTransform() const

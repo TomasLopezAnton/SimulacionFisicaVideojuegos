@@ -6,13 +6,18 @@ class DinamicRigidbody : public Rigidbody
 {
 public:
 
-	DinamicRigidbody(physx::PxPhysics* physics, physx::PxScene* s, physx::PxTransform t, physx::PxMaterial* m, physx::PxGeometry* g, Vector4 c, double time)
+	DinamicRigidbody(physx::PxPhysics* physics, physx::PxScene* s, physx::PxTransform t, physx::PxMaterial* m, physx::PxGeometry* g, Vector4 c, double time, float density)
 		: Rigidbody(physics, s, g, m, t, c, time)
 	{ 
 		rigidbody = gPhysics->createRigidDynamic(transform); 
+		rigidbody->setAngularDamping(0.9);
 
 		shape = gPhysics->createShape(*geometry, *material);
 		rigidbody->attachShape(*shape);
+
+		physx::PxRigidBodyExt::updateMassAndInertia(*rigidbody, density);
+
+		getMass();
 
 		renderItem = new RenderItem(shape, rigidbody, col);
 
@@ -30,7 +35,7 @@ public:
 
 		physx::PxGeometry* g = extractGeometry(shape->getGeometry());
 
-		return new DinamicRigidbody(gPhysics, scene, transform, material, g, col, remainingTime);
+		return new DinamicRigidbody(gPhysics, scene, transform, material, g, col, remainingTime, getMass());
 	};
 
 	void integrate(float t) override { rigidbody->clearForce(); rigidbody->clearTorque(); remainingTime -= t; };
@@ -40,6 +45,8 @@ public:
 	void rotate(physx::PxQuat r) { physx::PxTransform t = rigidbody->getGlobalPose(); t.q *= r; rigidbody->setGlobalPose(t); };
 
 	void setPosition(Vector3 p) { transform.p = p; rigidbody->setGlobalPose(transform); }
+
+	void setRotation(physx::PxQuat r) { physx::PxTransform t = rigidbody->getGlobalPose(); t.q = r; rigidbody->setGlobalPose(t);}
 
 	void setVelocity(Vector3 v) { rigidbody->setLinearVelocity(v); };
 

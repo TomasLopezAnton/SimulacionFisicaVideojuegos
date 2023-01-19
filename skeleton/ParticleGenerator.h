@@ -12,6 +12,9 @@ public:
 	~ParticleGenerator() { delete model; }
 	void setParticle(Particle* m) { model = m; };
 	virtual std::list<Particle*> generateParticles() = 0;
+	virtual void setPWidth(Vector3 p) {};
+	virtual	void setVWidth(Vector3 v) {};
+
 
 	void setMedianPosition(Vector3 mp) { meanPos = mp; };
 	void setMedianVelocity(Vector3 mv) { meanVel = mv; };
