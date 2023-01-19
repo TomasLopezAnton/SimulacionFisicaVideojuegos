@@ -162,25 +162,10 @@ void initPhysics(bool interactive)
 
 	boatSystem->addForceGenerator(buoyancy);
 
-	//physx::PxTransform floorPose = physx::PxTransform({ 0.0, 0.0, 0.0 });
-	//suelo = new StaticRigidbody(gPhysics, gScene, floorPose, gMaterial, new PxBoxGeometry(1000.0, 10.0, 1000.0), { 0.5, 1.0, 0.2, 1.0 }, 1e6);
-
-	//physx::PxTransform objetoPose = physx::PxTransform({ 0.0, -1000.0, 0.0 });
-	//objeto = new DinamicRigidbody(gPhysics, gScene, objetoPose, gMaterial, new PxBoxGeometry(1.0, 1.0, 1.0), { 1.0, 0.0, 0.0, 1.0 }, 10);
-
-	//RigidbodySystem* cubes = new RigidbodySystem();
-
 	RBSystems.push_back(boatSystem);
 	RBSystems.push_back(boyaSystem);
 
-	//generator = new GaussianBodyGenerator("Gen", objeto, { 0.0, 150.0, 0.0 }, { 0.0, 0.0, 0.0 }, { 0.1, 0.1, 0.1 }, { 20, 0.1, 20 }, 1);
-	//cubes->addGenerator(generator);
-
-	//RBwindGenerator = new RBWindForceGenerator({ -100.0, 0.0, -100.0 }, 0.1, 0.001, { 0.0, 40.0, 0.0 }, 40.0, 50.0);
-	//boatSystem->addForceGenerator(RBwindGenerator);
-
-	//cubes->addForceGenerator(RBwindGenerator);
-
+	boyaSystem->getBoya()->getRigidbody()->setName("Boya");
 	boyaSystem->repositionBoya();
 
 	windGenerator->setVelocity(windGenerator->getVelocity().magnitude() * (boyaSystem->getBoyaPosition() - boat->getPosition()).getNormalized());
@@ -262,13 +247,16 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)
 {
-	fireworks->setPosition(boyaSystem->getBoyaPosition());
-	fireworks->createFirework();
+	if(actor1->getName() == boyaSystem->getBoya()->getRigidbody()->getName() || actor2->getName() == boyaSystem->getBoya()->getRigidbody()->getName())
+	{
+		fireworks->setPosition(boyaSystem->getBoyaPosition());
+		fireworks->createFirework();
 
-	boyaSystem->repositionBoya();
+		boyaSystem->repositionBoya();
 
-	Vector3 windDir = Vector3(boyaSystem->getBoyaPosition().x - boat->getPosition().x, 0, boyaSystem->getBoyaPosition().z - boat->getPosition().z).getNormalized();
-	windGenerator->setVelocity(windGenerator->getVelocity().magnitude() * windDir);
+		Vector3 windDir = Vector3(boyaSystem->getBoyaPosition().x - boat->getPosition().x, 0, boyaSystem->getBoyaPosition().z - boat->getPosition().z).getNormalized();
+		windGenerator->setVelocity(windGenerator->getVelocity().magnitude() * windDir);
+	}
 }
 
 

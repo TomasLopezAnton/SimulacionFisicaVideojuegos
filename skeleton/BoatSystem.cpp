@@ -22,7 +22,7 @@ void BoatSystem::update(double t)
 	Vector3 normalVector = { -1, 0, 0 };
 	normalVector = sail->getRotation().rotate(normalVector).getNormalized() * 20;
 
-	Vector3 r = boat->getPosition() + boat->getRotation().rotate(Vector3(rudderDirection.x, rudderDirection.y, -rudderDirection.z).getNormalized() * 10);
+	Vector3 r = boat->getPosition() + boat->getRotation().rotate(Vector3(rudderDirection.x, rudderDirection.y, rudderDirection.z).getNormalized() * 10);
 
 	debugSystem->addParticle(new Particle(boat->getPosition() + normalVector, { 0, 0, 0 }, 1e9, 1, { 1.0, 0.0, 0.0 }, 0.05, { 1.0, 0.0, 0.0, 1.0 }, { 0.5, 0.5, 0.5 }));
 	debugSystem->addParticle(new Particle({ r.x, 10, r.z }, { 0, 0, 0 }, 0.1, 0.05, { 0.7, 0.7, 0.1, 1.0 }, 0.05));

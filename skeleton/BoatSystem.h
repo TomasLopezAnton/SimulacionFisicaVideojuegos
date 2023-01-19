@@ -57,13 +57,13 @@ private:
 
 
 	physx::PxQuat sailRotation;
-	Vector3 rudderPos = {-0.1, -5, 0.0};
+	Vector3 rudderPos = {-0.01, -5, 0.0};
 	Vector3 rudderDirection = Vector3(1, 0, 0);
 
 	float rudderLimit = 0.6;
 	float boatMaxVel = 20;
 
-	bool anchor = false;
+	bool anchor = true;
 
 	physx::PxPhysics* gPhysics;
 	physx::PxScene* scene;

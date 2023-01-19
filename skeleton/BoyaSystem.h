@@ -19,6 +19,8 @@ public:
 
 	Vector3 getBoyaPosition() { return boya->getPosition(); };
 
+	StaticRigidbody* getBoya() { return boya; };
+
 private:
 	physx::PxPhysics* gPhysics;
 
