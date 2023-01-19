@@ -6,19 +6,9 @@ void CloudSystem::update(double t)
 	if(remainingTime <= 0 && nClouds < maxClouds)
 	{
 		Particle* seed = particleGenerators.back()->generateParticles().front();
-		//seed->setColor({ 1.0, 0.0, 0.0, 1.0 });
+
 		particles.push_back(seed);
 		for (ForceGenerator* fg : forceGenerators) forceRegistry->addRegistry(fg, seed);
-
-		//particleGenerators.front()->setMedianPosition(seed->getPosition());
-		//std::list<Particle*> cloud = particleGenerators.front()->generateParticles();
-
-		//for (Particle* p : cloud)
-		//{
-		//	particles.push_back(p);
-
-		//	for (ForceGenerator* fg : forceGenerators) forceRegistry->addRegistry(fg, p);
-		//}
 
 		std::list<Particle*>* cloud = new std::list<Particle*>();
 
@@ -33,11 +23,12 @@ void CloudSystem::update(double t)
 
 	for(std::list<Particle*>* cloud : clouds)
 	{
-		particleGenerators.back()->setPWidth(boat->getPosition() + bounds);
+		particleGenerators.back()->setMedianPosition({ boat->getPosition().x, 220,  boat->getPosition().z });
 		
 		Particle* seed = cloud->front();
 
-		if(abs(seed->getPosition().x) > bounds.x || abs(seed->getPosition().z) > bounds.z) // Si la nube está fuera de los bounds
+		if(seed->getPosition().x > boat->getPosition().x + bounds.x || seed->getPosition().x < boat->getPosition().x - bounds.x 
+			|| seed->getPosition().z > boat->getPosition().z + bounds.z || seed->getPosition().z < boat->getPosition().z - bounds.z ) // Si la nube está fuera de los bounds
 		{
 			Particle* newSeed = particleGenerators.back()->generateParticles().front();
 

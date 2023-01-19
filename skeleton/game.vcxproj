@@ -256,6 +256,7 @@
     <ClCompile Include="AerodinamicForceGenerator.cpp" />
     <ClCompile Include="AnchoredSpringFG.cpp" />
     <ClCompile Include="BoatSystem.cpp" />
+    <ClCompile Include="BoyaSystem.cpp" />
     <ClCompile Include="BungeeForceGenerator.cpp" />
     <ClCompile Include="BuoyancyForceGenerator.cpp" />
     <ClCompile Include="BuoyancyForceGeneratorRB.cpp" />
@@ -294,6 +295,7 @@
     <ClInclude Include="AerodinamicForceGenerator.h" />
     <ClInclude Include="AnchoredSpringFG.h" />
     <ClInclude Include="BoatSystem.h" />
+    <ClInclude Include="BoyaSystem.h" />
     <ClInclude Include="BungeeForceGenerator.h" />
     <ClInclude Include="BuoyancyForceGenerator.h" />
     <ClInclude Include="BuoyancyForceGeneratorRB.h" />

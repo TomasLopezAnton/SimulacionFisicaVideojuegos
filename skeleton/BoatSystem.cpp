@@ -4,28 +4,26 @@ void BoatSystem::update(double t)
 {
 	RigidbodySystem::update(t);
 	
+	if (anchor) boat->setVelocity({ 0, 0, 0 });
+
+	else if (boat->getLinearVelocity().magnitude() > boatMaxVel) boat->setVelocity(boat->getLinearVelocity().getNormalized() * boatMaxVel);
+
 	physx::PxQuat boatRot = boat->getRotation();
 
 	sail->setPosition(boat->getPosition() + boatRot.rotate(sailPos));
-
 	sail->setRotation(sailRotation /** boatRot*/);
+
+	sailFront->setPosition(boat->getPosition() + boatRot.rotate(sailPos - Vector3(1, 0, 0)));
+	sailFront->setRotation(sailRotation /** boatRot*/);
 
 	mast->setPosition(boat->getPosition() + boatRot.rotate(mastPos));
 
-	Vector3 normalVector = { 1, 0, 0 };
+	//Indicadores de direccion
+	Vector3 normalVector = { -1, 0, 0 };
 	normalVector = sail->getRotation().rotate(normalVector).getNormalized() * 20;
-	
-	//debugParticles.push_back(new Particle(boat->getPosition() + normalVector, { 0, 0, 0 }, 1e9, 1, { 1.0, 0.0, 0.0 }, 0.05, { 1.0, 0.0, 0.0, 1.0 }, { 0.5, 0.5, 0.5 }));
-	//debugParticles.push_back(new Particle(boat->getPosition() + boat->getRotation().rotate(rudderDirection) * 20, {0, 0, 0}, 1e9, 1, {1.0, 0.0, 0.0}, 0.05, {1.0, 0.0, 1.0, 1.0}, {0.5, 0.5, 0.5}));
-	
 
-	//Vector3 r = Vector3(0, 0, 1).cross(rudderDirection);
-	//physx::PxQuat rudderRotation = {}
-	//rudder->setRotation(boat->getRotation() *  )
+	Vector3 r = boat->getPosition() + boat->getRotation().rotate(Vector3(rudderDirection.x, rudderDirection.y, -rudderDirection.z).getNormalized() * 10);
 
-	//std::cout << rudderDirection.x << " " << rudderDirection.y << " " << rudderDirection.z << "\n";
-
-	//debugParticles.push_back(new Particle(boat->getPosition(), { 0, 0, 0 }, 1e6, 0.99, {0.7, 0.7, 0.1, 1.0}, 20));
-
-	std::cout << boat->getLinearVelocity().magnitude() << "\n";
+	debugSystem->addParticle(new Particle(boat->getPosition() + normalVector, { 0, 0, 0 }, 1e9, 1, { 1.0, 0.0, 0.0 }, 0.05, { 1.0, 0.0, 0.0, 1.0 }, { 0.5, 0.5, 0.5 }));
+	debugSystem->addParticle(new Particle({ r.x, 10, r.z }, { 0, 0, 0 }, 0.1, 0.05, { 0.7, 0.7, 0.1, 1.0 }, 0.05));
 }

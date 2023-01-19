@@ -6,7 +6,7 @@
 class FireworkSystem : public ParticleSystem
 {
 public:
-	FireworkSystem() { createFireworkRules(); gravity = { 0.0, -10.0, 0.0 }; };
+	FireworkSystem(Vector3 pos) : position(pos) { createFireworkRules(); gravity = {0.0, -10.0, 0.0}; };
 	void update(double t);
 
 	void createFireworkRules();
@@ -14,8 +14,11 @@ public:
 
 	ParticleGenerator* getParticleGenerator(std::string name);
 
+	void setPosition(Vector3 pos) { position = pos; };
+
 protected:
 private:
+	Vector3 position;
 	std::vector<FireworkRule> fireworkRules;
 	int maxParticles = 1000;
 };

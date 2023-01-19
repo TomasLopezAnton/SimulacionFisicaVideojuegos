@@ -30,6 +30,7 @@
 
 #include "RigidbodySystem.h"
 #include "BoatSystem.h"
+#include "BoyaSystem.h"
 
 #include "WindForceGenerator.h"
 #include "VortexGenerator.h"
@@ -91,6 +92,7 @@ DinamicRigidbody* boat;
 GaussianBodyGenerator* generator;
 
 BoatSystem* boatSystem;
+BoyaSystem* boyaSystem;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -127,12 +129,13 @@ void initPhysics(bool interactive)
 
 	CameraTarget* t = new CameraTarget(boat->getRigidbody());
 
-	boatSystem = new BoatSystem(boat, gPhysics, windGenerator);
+	debugSystem = new ParticleSystem();
+	boatSystem = new BoatSystem(boat, gPhysics, windGenerator, debugSystem);
+	boyaSystem = new BoyaSystem(gPhysics, boat);
 
 	water = new Particle({ 0.0, 1.0, 0.0 }, { 0.0, 0.0, 0.0 }, 1e6, 0.99, { 0.0, 0.25, 0.35, 1.0 }, 1e6, new physx::PxBoxGeometry(10000.0, 2.5, 10000.0));
 
 	waterSystem = new ParticleSystem();
-	debugSystem = new ParticleSystem();
 	cloudSystem = new CloudSystem(boat, {15, 15, 30}, {2000, 10, 2000}, 200, 25, 1);
 	foamSystem = new FoamSystem(boat, water);
 
@@ -146,11 +149,14 @@ void initPhysics(bool interactive)
 	particleSystems.push_back(debugSystem);
 
 	foamSystem->addForceGenerator(new BuoyancyForceGenerator(1, 1000.0, water, foamSystem));
-	foamSystem->setGravity({ 0.0, -20, 0.0 });
+	foamSystem->setGravity({ 0.0, -1, 0.0 });
 	foamSystem->generateContinously(true);
+
+	fireworks = new FireworkSystem({0, 0, 0});
 
 	particleSystems.push_back(waterSystem);
 	particleSystems.push_back(foamSystem);
+	particleSystems.push_back(fireworks);
 
 	BuoyancyForceGeneratorRB* buoyancy = new BuoyancyForceGeneratorRB(10, 1000.0, water, debugSystem);
 
@@ -165,6 +171,7 @@ void initPhysics(bool interactive)
 	//RigidbodySystem* cubes = new RigidbodySystem();
 
 	RBSystems.push_back(boatSystem);
+	RBSystems.push_back(boyaSystem);
 
 	//generator = new GaussianBodyGenerator("Gen", objeto, { 0.0, 150.0, 0.0 }, { 0.0, 0.0, 0.0 }, { 0.1, 0.1, 0.1 }, { 20, 0.1, 20 }, 1);
 	//cubes->addGenerator(generator);
@@ -173,6 +180,10 @@ void initPhysics(bool interactive)
 	//boatSystem->addForceGenerator(RBwindGenerator);
 
 	//cubes->addForceGenerator(RBwindGenerator);
+
+	boyaSystem->repositionBoya();
+
+	windGenerator->setVelocity(windGenerator->getVelocity().magnitude() * (boyaSystem->getBoyaPosition() - boat->getPosition()).getNormalized());
 }
 
 	
@@ -230,15 +241,19 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		boatSystem->changeRudderDirection(-1);
 		break;
 	}
-	case 'Q':
+	case 'E':
 	{
 		boatSystem->rotateSail(PxQuat(-PxPi / 16, PxVec3(0, 1, 0)));
 		break;
 	}
-	case 'E':
+	case 'Q':
 	{
 		boatSystem->rotateSail(PxQuat(PxPi / 16, PxVec3(0, 1, 0)));
 		break;
+	}
+	case 'S':
+	{
+		boatSystem->throwAnchor();
 	}
 	default:
 		break;
@@ -247,8 +262,13 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)
 {
-	PX_UNUSED(actor1);
-	PX_UNUSED(actor2);
+	fireworks->setPosition(boyaSystem->getBoyaPosition());
+	fireworks->createFirework();
+
+	boyaSystem->repositionBoya();
+
+	Vector3 windDir = Vector3(boyaSystem->getBoyaPosition().x - boat->getPosition().x, 0, boyaSystem->getBoyaPosition().z - boat->getPosition().z).getNormalized();
+	windGenerator->setVelocity(windGenerator->getVelocity().magnitude() * windDir);
 }
 
 

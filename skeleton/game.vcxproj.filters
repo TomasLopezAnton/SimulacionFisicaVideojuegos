@@ -103,6 +103,9 @@
     <ClCompile Include="FoamSystem.cpp">
       <Filter>ParticleSystems</Filter>
     </ClCompile>
+    <ClCompile Include="BoyaSystem.cpp">
+      <Filter>RigidBodies\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="FoamSystem.h">
       <Filter>ParticleSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="BoyaSystem.h">
+      <Filter>RigidBodies\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
