@@ -21,8 +21,6 @@ public:
 
 		mast = new Particle(boat->getPosition() + mastPos, { 0, 0, 0 }, 1e6, 1, { 0.2, 0.1, 0.0, 1.0 }, 1e6, new physx::PxBoxGeometry(0.2, 8, 0.3));
 
-		rudder = new Particle(boat->getPosition() + mastPos, { 0, 0, 0 }, 1e6, 1, { 0.2, 0.1, 0.0, 1.0 }, 1e6, new physx::PxBoxGeometry(0.2, 1, 0.3));
-
 		addForceGenerator(new AerodinamicForceGenerator(sail, boat, wG, &rudderDirection, rudderPos));
 	};
 

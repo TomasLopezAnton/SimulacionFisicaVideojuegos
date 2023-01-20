@@ -1,0 +1,5 @@
+Q y E para rotar la vela.
+A y D para cambiar la dirección del timón.
+S para soltar y recoger el ancla, inmovilizando al barco pero permitiendo que rote.
+
+El barco comienza anclado, presiona S para que se mueva.
